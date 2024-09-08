@@ -138,20 +138,20 @@ const Contact = () => {
           <CardContent className="p-6">
             <form className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-medium text-gray-700">Your Name</label>
+                <label htmlFor="name" className="text-sm font-medium text-gray-700">Name</label>
                 <input
                   id="name"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Name "
                   className="w-full p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-gray-700">Your Email</label>
+                <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
                 <input
                   id="email"
                   type="email"
-                  placeholder="john@example.com"
+                  placeholder="Email"
                   className="w-full p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
               </div>
