@@ -29,7 +29,7 @@ const Banner = () => {
         />
         <div className="space-y-6 text-left">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl text-black">Mango Disease Detection</h1>
-          <p className="max-w-[600px] text-white text-xl">
+          <p className="max-w-[600px] text-white text-lg">
             Protect your mango trees with our AI-powered disease detection app. Identify issues early, get expert treatment advice, and maximize your yield.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -49,7 +49,7 @@ const Banner = () => {
 const About = () => {
   return (
     <section id="about" className="w-11/12 rounded-xl bg-white py-12 md:py-24 lg:py-32">
-      <div className="container grid grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 md:px-6">
+      <div className="container grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         <div className="space-y-6 text-left">
           <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-green-600">About Our App</h2>
           <p className="max-w-[600px] text-gray-600 text-lg">
@@ -91,16 +91,16 @@ const About = () => {
 const HowToUse = () => {
   return (
     <section id="how-to-use" className="w-11/12 rounded-xl bg-green-600 py-12 md:py-24 lg:py-32">
-      <div className="container px-4 md:px-6">
+      <div className="px-4 md:px-6 w-full">
         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white text-center mb-12">How to Use Our App</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
           {[
             { title: "Take a Photo", icon: Camera, description: "Snap a clear picture of the affected mango leaf or fruit." },
             { title: "Upload Image", icon: Smartphone, description: "Upload the image to our app with a single tap." },
             { title: "Get Results", icon: Zap, description: "Receive instant disease identification and analysis." },
             { title: "Follow Advice", icon: Leaf, description: "Apply our expert treatment recommendations." },
           ].map((step, index) => (
-            <Card key={index} className="bg-white/10 border-none">
+            <Card key={index} className="bg-white/10 border-none w-full">
               <CardContent className="flex flex-col items-center p-6 text-center space-y-4">
                 <step.icon className="w-12 h-12 text-yellow-300" />
                 <h3 className="text-xl font-semibold text-white">{step.title}</h3>
@@ -117,7 +117,7 @@ const HowToUse = () => {
 const Contact = () => {
   return (
     <section id="contact" className="w-11/12 rounded-xl bg-white py-12 md:py-24 lg:py-32">
-      <div className="container grid grid-cols-1 items-start gap-12 px-4 md:grid-cols-2 md:px-6">
+      <div className="grid grid-cols-1 items-start gap-12  md:grid-cols-2 ">
         <div className="space-y-6 text-left">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-green-600">Get in Touch</h2>
           <p className="max-w-[600px] text-gray-600 text-lg">
