@@ -41,8 +41,8 @@ interface NavLinkProps{
 }
 const NavLink = ({href,menuText}:NavLinkProps) => {
   return(
-    <Link href={href} className="text-sm font-medium hover:bg-gray-100 p-2 px-4 rounded-md h-8" prefetch={false}>
-        {menuText}
+    <Link href={href} className="text-sm font-medium flex justify-center items-center hover:bg-gray-100 px-4 rounded-md h-8" prefetch={false}>
+        <p>{menuText}</p>
     </Link>
   )
 }

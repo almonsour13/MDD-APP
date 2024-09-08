@@ -50,7 +50,7 @@ const About = () => {
   return (
     <section id="about" className="w-11/12 rounded-xl bg-white py-12 md:py-24 lg:py-32">
       <div className="container grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-        <div className="space-y-6 text-left">
+        <div className="space-y-6 mx-auto text-left">
           <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-green-600">About Our App</h2>
           <p className="max-w-[600px] text-gray-600 text-lg">
             Our Mango Disease Detection app leverages cutting-edge AI to revolutionize mango farming. We provide:
