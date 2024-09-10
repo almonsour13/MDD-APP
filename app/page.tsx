@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Leaf, Camera, Zap, Smartphone } from "lucide-react"
 import { useEffect, useState } from "react"
-
+import Image from "next/image"
 export default function LandingPage() {
   return (
     <div className="flex flex-col items-center space-y-4 min-h-[100dvh]">
@@ -38,7 +38,7 @@ const Banner = () => {
           {/* Left Column - Image */}
           <div className="w-full lg:w-1/2">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <img
+              <Image
                 width={600}
                 height={400}
                 src="https://ykwjjfkqxfxbvjqoqxjy.supabase.co/storage/v1/object/public/images/mango-disease-detection.jpg"
@@ -101,7 +101,7 @@ const About = () => {
           </div>
           <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <img
+              <Image
                 src="/placeholder.svg?height=400&width=600"
                 width={600}
                 height={400}
