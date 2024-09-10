@@ -41,9 +41,6 @@ const Header = () => {
             <SheetContent side="left" className="w-[340px]">
               <SheetHeader>
                 <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you're done.
-                </SheetDescription>
               </SheetHeader>
               <div className="flex flex-col gap-4 py-4">
                 <NavLink href="/upload" menuText="Home"/>
