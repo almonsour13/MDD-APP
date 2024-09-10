@@ -50,19 +50,16 @@ const Banner = () => {
           </div>
           {/* Right Column - Text Content */}
           <div className="w-full lg:w-1/2 lg:pr-12 mb-10 lg:mb-0 space-y-4">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900">
-                  Mango Disease Detector
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl ">
+             <span className="text-primary "> Mango Disease Detection </span>
+             <span className="text-green-700">powered by AI</span>
             </h1>
             <p className="text-sm sm:text-lg text-white">
               Protect your mango trees with our AI-powered disease detection app. Identify issues early, get expert treatment advice, and maximize your yield.
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <Button className="w-full sm:w-auto px-8 py-3 text-base font-medium text-black bg-white hover:bg-green-700">
-                Get Started
-              </Button>
-              <Button variant="outline" className="w-full sm:w-auto px-8 py-3 text-base font-medium text-white bg-transparent hover:bg-green-200">
-                Learn More
-              </Button>
+            <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow h-10 rounded-md px-8 bg-white text-green-600 hover:bg-green-100">Get Started</button>
+            <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border shadow-sm hover:text-accent-foreground h-10 rounded-md px-8 bg-transparent text-white border-white hover:bg-white/20">Learn More</button>
             </div>
           </div>
         </div>
