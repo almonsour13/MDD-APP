@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Leaf, Camera, Zap, Smartphone } from "lucide-react"
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Footer from "@/components/common/footer"
 export default function LandingPage() {
   return (
     <div className="flex flex-col items-center space-y-4 min-h-[100dvh]">
@@ -15,22 +16,12 @@ export default function LandingPage() {
       <About />
       <HowToUse />
       <Contact />
+      <Footer/>
     </div>
   )
 }
 
 const Banner = () => {
-  const [key, setKey] = useState(0)
-  const headingText = "Detect Mango Diseases"
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setKey(prevKey => prevKey + 1)
-    }, 10000) // Replay animation every 10 seconds
-
-    return () => clearInterval(interval)
-  }, [])
-
   return (
     <section id="banner" className="w-11/12 rounded-xl bg-gradient-to-r from-green-500 to-yellow-400 py-12 md:py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
