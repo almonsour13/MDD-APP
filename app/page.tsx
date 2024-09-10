@@ -38,7 +38,7 @@ const Banner = () => {
           {/* Left Column - Image */}
           <div className="w-full lg:w-1/2">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <Image
+              <img
                 width={600}
                 height={400}
                 src="https://ykwjjfkqxfxbvjqoqxjy.supabase.co/storage/v1/object/public/images/mango-disease-detection.jpg"
@@ -49,7 +49,7 @@ const Banner = () => {
             </div>
           </div>
           {/* Right Column - Text Content */}
-          <div className="w-full lg:w-1/2 lg:pr-12 mb-10 lg:mb-0 space-y-4">
+          <div className="w-full lg:w-1/2 lg:pr-12 space-y-4">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl xl:text-7xl ">
              <span className="text-primary "> Mango Disease Detection </span>
              <span className="text-green-700">powered by AI</span>
@@ -101,7 +101,7 @@ const About = () => {
           </div>
           <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <Image
+              <img
                 src="/placeholder.svg?height=400&width=600"
                 width={600}
                 height={400}
