@@ -32,7 +32,7 @@ const Banner = () => {
   }, [])
 
   return (
-    <div className="w-11/12 rounded-xl bg-gradient-to-r from-green-500 to-yellow-400 py-12 md:py-16 lg:py-20">
+    <section id="banner" className="w-11/12 rounded-xl bg-gradient-to-r from-green-500 to-yellow-400 py-12 md:py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-start gap-8">
           {/* Left Column - Image */}
@@ -64,7 +64,7 @@ const Banner = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 
