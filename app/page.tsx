@@ -4,7 +4,7 @@ import Header from "@/components/common/header"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Leaf, Camera, Zap, Smartphone } from "lucide-react"
+import { Leaf, Camera, Zap, ImageUp,FileCheck,Smartphone, HandHelping } from "lucide-react"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Footer from "@/components/common/footer"
@@ -110,25 +110,25 @@ const About = () => {
 
 const HowToUse = () => {
   return (
-    <section id="how-to-use" className="w-11/12 rounded-xl bg-gradient-to-br from-green-50 via-yellow-50 to-green-100 py-12 md:py-24 lg:py-32">
+    <section id="how-to-use" className="w-11/12 rounded-xl  py-12 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-green-800 text-center mb-12">
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-6xl text-center mb-24">
           How to Use Our App
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { title: "Take a Photo", icon: Camera, description: "Snap a clear picture of the affected mango leaf or fruit.", color: "text-blue-600", bgColor: "bg-blue-100" },
-            { title: "Upload Image", icon: Smartphone, description: "Upload the image to our app with a single tap.", color: "text-purple-600", bgColor: "bg-purple-100" },
-            { title: "Get Results", icon: Zap, description: "Receive instant disease identification and analysis.", color: "text-yellow-600", bgColor: "bg-yellow-100" },
-            { title: "Follow Advice", icon: Leaf, description: "Apply our expert treatment recommendations.", color: "text-green-600", bgColor: "bg-green-100" },
+            { title: "Upload Image", icon: ImageUp, description: "Upload the image to our app with a single tap.", color: "text-purple-600", bgColor: "bg-purple-100" },
+            { title: "Get Results", icon: FileCheck, description: "Receive instant disease identification and analysis.", color: "text-yellow-600", bgColor: "bg-yellow-100" },
+            { title: "Follow Advice", icon: HandHelping, description: "Apply our expert treatment recommendations.", color: "text-green-600", bgColor: "bg-green-100" },
           ].map((step, index) => (
-            <Card key={index} className="bg-white border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Card key={index} className="bg-white border-0 shadow-none">
               <CardContent className="flex flex-col items-center p-6 text-center space-y-4">
-                <div className={`rounded-full p-3 ${step.bgColor}`}>
+                <div className={`rounded-full p-6 ${step.bgColor}`}>
                   <step.icon className={`w-8 h-8 ${step.color}`} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+                <h3 className="text-xl font-bold text-gray-800">{step.title}</h3>
+                <p className="text-sm text-gray-600">{step.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -141,7 +141,7 @@ const HowToUse = () => {
 const Contact = () => {
   return (
     <section id="contact" className="w-11/12 rounded-xl bg-white py-12 md:py-24 lg:py-32">
-      <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 px-4 sm:px-6 lg:px-8">
         <div className="space-y-6 text-left">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-green-600">Get in Touch</h2>
           <p className="max-w-[600px] text-gray-600 text-lg">
