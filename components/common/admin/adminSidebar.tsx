@@ -48,7 +48,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
       
       {/* Sidebar */}
       <div 
-        className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 bg-green-800 dark:bg-background text-white transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 bg-primary-foreground dark:bg-background text-white transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } transition-all duration-300 ease-in-out lg:relative lg:translate-x-0`}
       >
@@ -76,8 +76,8 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
             <Link
               key={item.name}
               href={`/admin/${item.href}`}
-              className={`w-full text-left px-4 py-2 rounded-lg hover:bg-green-700 transition-colors ${
-                activeTab === item.name.toLowerCase().replace(' ', '-') ? 'bg-green-700' : ''
+              className={`w-full text-left px-4 py-2 rounded-lg hover:bg-primary transition-colors ${
+                activeTab === item.name.toLowerCase().replace(' ', '-') ? 'bg-primary' : ''
               } flex items-center`}
               onClick={() => {
                 setActiveTab(item.name.toLowerCase().replace(' ', '-'))

@@ -12,7 +12,7 @@ export default function AdminLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
     return (
-      <div className="flex h-auto lg:h-screen relative bg-green-800 dark:bg-background">
+      <div className="flex h-auto lg:h-screen relative bg-primary-foreground dark:bg-background">
         <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         <div className="w-full flex-1 flex flex-col overflow-hidden">
           <AdminHeader toggleSidebar={toggleSidebar}/>

@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 interface AdminHeaderProps {
   toggleSidebar: () => void
@@ -39,7 +40,7 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
     document.title = `Admin | ${title && title !== "Admin" ? title : 'Dashboard'}`;
   }, [pathname]);
   return (
-    <header className="bg-green-800 dark:bg-background shadow-sm">
+    <header className="bg-primary-foreground dark:bg-background shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
@@ -53,13 +54,12 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
             <h1 className="text-xl sm:text-2xl font-semibold text-white">{pageTitle}</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
+            <Link
+              href="/admin/upload"
               className="text-white flex items-center space-x-2"
             >
               <Upload className="h-5 w-5" />
-            </Button>
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
