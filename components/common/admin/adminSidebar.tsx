@@ -59,9 +59,9 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
               alt="icon"
               width={48}
               height={48}
-              className="w-8 h-8"
+              className="w-6 h-6"
             />
-            <h2 className="text-3xl font-bold">Mango<span className='text-yellow-600'>Care</span></h2>
+            <h2 className="text-2xl font-bold">Mango<span className='text-yellow-600'>Care</span></h2>
           </div>
           <button 
             onClick={toggleSidebar} 
