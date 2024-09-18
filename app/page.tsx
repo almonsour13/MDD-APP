@@ -1,14 +1,19 @@
 'use client'
 
-import Header from "@/components/common/header"
+import Header from "@/components/common/homepage/header"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Leaf, Camera, Zap, ImageUp,FileCheck,Smartphone, HandHelping } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Image from "next/image"
-import Footer from "@/components/common/footer"
+import Footer from "@/components/common/homepage/footer"
+import { useRouter } from 'next/navigation';
 export default function LandingPage() {
+  const router = useRouter();
+  useEffect(()=>{
+    router.push("/admin")
+  },[router])
   return (
     <div className="flex flex-col items-center space-y-4 min-h-[100dvh]">
       <Header />
@@ -29,7 +34,7 @@ const Banner = () => {
           {/* Left Column - Image */}
           <div className="w-full lg:w-1/2">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <img
+              <Image
                 width={600}
                 height={400}
                 src="https://ykwjjfkqxfxbvjqoqxjy.supabase.co/storage/v1/object/public/images/mango-disease-detection.jpg"
@@ -92,7 +97,7 @@ const About = () => {
           </div>
           <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <img
+              <Image
                 src="/placeholder.svg?height=400&width=600"
                 width={600}
                 height={400}
