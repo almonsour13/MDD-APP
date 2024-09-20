@@ -1,11 +1,11 @@
 'use client'
-
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
-import { useTheme } from "next-themes"
 import React, { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Bell, ChevronDown, Settings, Leaf, Menu, User, Upload } from 'lucide-react'
+import { useTheme } from "next-themes"
 import { usePathname } from 'next/navigation'
+import Link from "next/link"
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
+import { Bell, Settings, Menu, User, Upload } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,19 +13,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
-import Link from "next/link"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface AdminHeaderProps {
   toggleSidebar: () => void
 }
 
-const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
+export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
   const [pageTitle, setPageTitle] = useState("");
   const pathname = usePathname()
+  const { setTheme, theme } = useTheme()
 
   useEffect(() => {
-    // Convert pathname to title case and remove hyphens
     const title = pathname
       .split('/')
       .pop()
@@ -33,71 +36,124 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
-    // Set the page title, defaulting to 'Dashboard' if the title is 'Admin'
     setPageTitle(title && title !== "Admin" ? title : 'Dashboard');
-    
-    // Update document title
     document.title = `Admin | ${title && title !== "Admin" ? title : 'Dashboard'}`;
   }, [pathname]);
+
   return (
     <header className="bg-primary-foreground dark:bg-background shadow-sm">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <button
               onClick={toggleSidebar}
-              className="mr-4 text-white lg:hidden focus:outline-none focus:ring-2 focus:ring-white"
+              className="mr-4 text-foreground lg:hidden focus:outline-none focus:ring-2 focus:ring-primary text-white"
               aria-label="Toggle sidebar"
             >
               <Menu className="h-6 w-6" />
             </button>
-            <h1 className="text-xl sm:text-2xl font-semibold text-white">{pageTitle}</h1>
+            <h1 className="text-xl lg:text-2xl font-semibold text-white ">{pageTitle}</h1>
           </div>
-          <div className="flex items-center gap-2">
+
+          <div className="flex items-center space-x-4">
             <Link
               href="/admin/upload"
-              className="text-white flex items-center space-x-2"
+              className="text-foreground hover:text-primary transition-colors text-white"
+              aria-label="Upload"
             >
               <Upload className="h-5 w-5" />
             </Link>
+            
+            {/* Desktop view: Show notification and dark mode toggle */}
+            
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative text-white"
+                    aria-label="Notifications"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute top-0 right-0 h-2 w-2 bg-primary rounded-full"></span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">New upload complete</p>
+                      <p className="text-xs text-muted-foreground">2 minutes ago</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">Analysis finished</p>
+                      <p className="text-xs text-muted-foreground">1 hour ago</p>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-primary justify-center">
+                    View all notifications
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="icon"
-                  className="text-white hidden lg:block"
-                  aria-label="Notifications"
-                >
-                  <Bell className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuItem>New upload</DropdownMenuItem>
-                <DropdownMenuItem>Analysis complete</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <ModeToggle/>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="link"
                   size="sm"
-                  className="text-white"
+                  className="relative h-8 w-8 rounded-full"
                 >
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="/avatars/01.png" alt="@username" />
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">John Doe</p>
+                    <p className="text-xs leading-none text-muted-foreground">john@example.com</p>
+                  </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                {/* Mobile view: Show notifications and dark mode in dropdown */}
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    {theme === "dark" ? (
+                      <SunIcon className="mr-2 h-4 w-4" />
+                    ) : (
+                      <MoonIcon className="mr-2 h-4 w-4" />
+                    )}
+                    <span>Theme</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem onClick={() => setTheme("light")}>
+                      Light
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme("dark")}>
+                      Dark
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme("system")}>
+                      System
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-destructive">
+                  Log out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -106,32 +162,3 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
     </header>
   )
 }
-
-export function ModeToggle() {
-  const { setTheme } = useTheme()
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="bg-transparent border-none text-white shadow-none">
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
-
-export default AdminHeader
