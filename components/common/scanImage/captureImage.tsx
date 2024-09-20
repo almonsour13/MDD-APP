@@ -1,26 +1,26 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Camera, Image as LucideImage, Plus, Check, Upload } from "lucide-react";
 
 interface UploadImageProps {
   uploadedImage: string | null;
   setUploadedImage: (image: string | null) => void;
 }
 
-const CameraField: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedImage }) => {
+const CameraField = () => {
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-
     startCamera();
-
     return () => {
-      // Stop all video streams when the component unmounts
       const stream = videoRef.current?.srcObject as MediaStream;
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
@@ -33,7 +33,7 @@ const CameraField: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: { exact: "environment" } // Use the back camera
+            facingMode: { exact: "environment" }
           }
         });
         videoRef.current.srcObject = stream;
@@ -43,17 +43,17 @@ const CameraField: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
     }
   };
   const startCameraAgain = async () => {
-    setLoading(false); // Ensure loading is false before restarting the camera
-    await startCamera(); // Restart the camera
+    setLoading(false); 
+    await startCamera();
   };
 
   const handleCancel = () => {
-    setUploadedImage(null); // Clear the uploaded image
-    startCameraAgain(); // Restart the camera
+    setUploadedImage(null); 
+    startCameraAgain();
   };
 
   const handleCapture = async () => {
-    setLoading(true); // Set loading state
+    setLoading(true);
     const canvas = canvasRef.current;
     const video = videoRef.current;
 
@@ -63,27 +63,26 @@ const CameraField: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
       canvas.height = video.videoHeight;
       context?.drawImage(video, 0, 0);
       const imageData = canvas.toDataURL("image/png");
-      setUploadedImage(imageData); // Set the captured image
+      setUploadedImage(imageData);
     }
 
-    setLoading(false); // Reset loading state after processing
+    setLoading(false);
   };
 
   return (
-    <Card className="p-4 flex flex-col gap-4">
-      <CardContent className={`h-72 lg:h-80 p-0 lg:p-4 flex rounded-xl`}>
+    <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
+      <CardContent className={`h-80 lg:h-80 p-0 lg:p-4 flex rounded-xl border-none border-0`}>
         <div className="flex-1 flex justify-center items-center h-full relative">
-          <div className="h-72 w-72 overflow-hidden rounded-lg flex items-center justify-center relative bg-black">
+          <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black">
             {uploadedImage ? (
               <div className="relative w-full h-full">
                 <img src={uploadedImage} alt="Captured" className="w-full h-full object-cover" />
-                <Button 
-                  variant="destructive" 
-                  size="icon"
-                  className="absolute top-2 right-2" 
+                <Button
                   onClick={handleCancel}
+                  className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
+                  variant="secondary"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </Button>
               </div>
             ) : (
@@ -106,18 +105,105 @@ const CameraField: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
         </div>
       </CardContent>
       <CardFooter className='flex-1 p-0'>
-        <div className="flex-1 flex">
+        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture}/>
+      </CardFooter>
+      <canvas ref={canvasRef} className="hidden" />
+    </Card>
+  );
+};
+interface FooterProps{
+  uploadedImage: string | null;
+  handleCapture: () => void;
+}
+const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture }) => {
+  const [treeCodeInput, setTreeCodeInput] = useState("")
+  const [treeCode, setTreeCode] = useState("")
+  const [isInputTreeCode, setInputTreeCode] = useState(false)
+  
+  const handleScan = () => {
+    
+  }
+  const toggleCustomTreeType = () => {
+    setInputTreeCode(!isInputTreeCode)
+    if (!isInputTreeCode) {
+      setTreeCode("")
+    }
+  }
+  return(
+    
+    <div className="flex flex-col gap-2 w-full">      
+      <div className="flex-1 flex items-center w-full gap-2">
+        {isInputTreeCode ? (
+          <>
+            <Input
+              type="text"
+              placeholder="Enter tree code"
+              value={treeCodeInput}
+              onChange={(e) => setTreeCodeInput(e.target.value)}
+              className="h-10"
+            />
+                <Button
+                  onClick={toggleCustomTreeType}
+                  variant="outline"
+                  size="icon"
+                  className="flex-shrink-0 h-10 w-10"
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">
+                    {isInputTreeCode ? "Use predefined types" : "Enter custom type"}
+                  </span>
+                </Button>
+          </>
+        ) : (
+          <>
+            <Select value={treeCode} onValueChange={setTreeCode}>
+              <SelectTrigger className='h-10'>
+                <SelectValue placeholder="Select tree code" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="T001">T001</SelectItem>
+                <SelectItem value="T002">T002</SelectItem>
+                <SelectItem value="T003">T003</SelectItem>
+                <SelectItem value="T004">T004</SelectItem>
+                <SelectItem value="T005">T005</SelectItem>
+                <SelectItem value="T006">T006</SelectItem>
+                <SelectItem value="T007">T007</SelectItem>
+                <SelectItem value="T008">T008</SelectItem>
+                <SelectItem value="T009">T009</SelectItem>
+                <SelectItem value="T010">T010</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              onClick={toggleCustomTreeType}
+              variant="outline"
+              size="icon"
+              className="h-10 w-10"
+            >
+              <Plus className="h-4 w-4" />
+              <span className="sr-only">
+                {isInputTreeCode ? "Use predefined types" : "Enter custom type"}
+              </span>
+            </Button>
+          </>
+        )}
+      </div>
+      {!uploadedImage?(     
           <Button 
             className="w-full text-white" 
             onClick={handleCapture}
           >
             Capture Image
           </Button>
-        </div>
-      </CardFooter>
-      <canvas ref={canvasRef} className="hidden" />
-    </Card>
-  );
-};
-
+      ):(
+        <Button 
+          className="w-full text-white" 
+          onClick={handleScan}
+          disabled={!uploadedImage || !treeCode}
+        >
+          Scan Image
+        </Button>
+      )}
+  </div>
+  )
+}
 export default CameraField;
