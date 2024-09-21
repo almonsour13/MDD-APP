@@ -78,14 +78,14 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
               href={`/admin/${item.href}`}
               className={`w-full text-left px-4 py-2 rounded-lg hover:bg-primary transition-colors ${
                 activeTab === item.name.toLowerCase().replace(' ', '-') ? 'bg-primary' : ''
-              } flex items-center`}
+              } flex items-center gap-3`}
               onClick={() => {
                 setActiveTab(item.name.toLowerCase().replace(' ', '-'))
                 toggleSidebar()
               }}
               prefetch={true}
             >
-              <item.icon className="h-5 w-5 mr-3" aria-hidden="true" />
+              <item.icon className="h-5 w-5" aria-hidden="true" />
               <span>{item.name}</span>
             </Link>
           ))}

@@ -14,60 +14,71 @@ interface UploadImageProps {
 
 const CameraField = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [loading, setLoading] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [loading, setLoading] = useState(false)
+  const [cameraActive, setCameraActive] = useState(false)
+  const [focusSupported, setFocusSupported] = useState(false)
 
-  useEffect(() => {
-    startCamera();
-    return () => {
-      const stream = videoRef.current?.srcObject as MediaStream;
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-    };
-  }, []);
-  
   const startCamera = async () => {
     if (videoRef.current) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
+            //facingMode: "user"
             facingMode: { exact: "environment" }
           }
-        });
-        videoRef.current.srcObject = stream;
+        })
+        videoRef.current.srcObject = stream
+        setCameraActive(true)
       } catch (error) {
-        console.error("Error accessing the camera:", error);
+        console.error("Error accessing the camera:", error)
+        setCameraActive(false)
       }
     }
-  };
-  const startCameraAgain = async () => {
-    setLoading(false); 
-    await startCamera();
-  };
+  }
+
+  const stopCamera = () => {
+    const stream = videoRef.current?.srcObject as MediaStream
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop())
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+    setCameraActive(false)
+  }
+
+  useEffect(() => {
+    if (!uploadedImage) {
+      startCamera()
+    }
+    return () => {
+      stopCamera()
+    }
+  }, [uploadedImage])
 
   const handleCancel = () => {
-    setUploadedImage(null); 
-    startCameraAgain();
-  };
+    setUploadedImage(null)
+  }
 
   const handleCapture = async () => {
-    setLoading(true);
-    const canvas = canvasRef.current;
-    const video = videoRef.current;
+    setLoading(true)
+    const canvas = canvasRef.current
+    const video = videoRef.current
 
     if (canvas && video) {
-      const context = canvas.getContext("2d");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context?.drawImage(video, 0, 0);
-      const imageData = canvas.toDataURL("image/png");
-      setUploadedImage(imageData);
+      const context = canvas.getContext("2d")
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      context?.drawImage(video, 0, 0)
+      const imageData = canvas.toDataURL("image/png")
+      setUploadedImage(imageData)
+      stopCamera()
     }
 
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   return (
     <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
@@ -97,6 +108,11 @@ const CameraField = () => {
                 {loading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <span className="text-white">Loading...</span>
+                  </div>
+                )}
+                {!cameraActive && !loading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black">
+                    <span className="text-white">Camera not available</span>
                   </div>
                 )}
               </>
