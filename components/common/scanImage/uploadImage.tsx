@@ -17,7 +17,7 @@ const UploadField = () =>{
             <UploadImage uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} isScanning={isScanning} setIsScanning={setIsScanning} />
           </CardContent>
           <CardFooter className='flex-1 p-0'>
-            <FooterContent uploadedImage={uploadedImage} setIsScanning={setIsScanning}/>
+            <FooterContent uploadedImage={uploadedImage} isScanning={isScanning} setIsScanning={setIsScanning}/>
           </CardFooter>
         </Card>
     )
@@ -134,9 +134,10 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
 }
 interface FooterProps{
   uploadedImage: string | null;
+  isScanning: boolean;
   setIsScanning: (isScanning: boolean) => void;
 }
-const FooterContent:React.FC<FooterProps> = ({ uploadedImage, setIsScanning  }) => {
+const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsScanning  }) => {
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
@@ -214,7 +215,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, setIsScanning  }) 
       <Button 
         className="w-full text-white" 
         onClick={handleScan}
-        disabled={!uploadedImage || !treeCode}
+        disabled={!uploadedImage || !treeCode || isScanning}
       >
         Scan Image
       </Button>

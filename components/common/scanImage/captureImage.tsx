@@ -86,7 +86,7 @@ const CameraField = () => {
               <div className="relative w-full h-full">
                 <img src={uploadedImage} alt="Captured" className="w-full h-full object-cover" />
                 {isScanning && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary to-transparent animate-scan" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
                 )}
                 <Button
                   onClick={handleCancel}
@@ -121,7 +121,7 @@ const CameraField = () => {
         </div>
       </CardContent>
       <CardFooter className='flex-1 p-0'>
-        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} setIsScanning={setIsScanning}/>
+        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} isScanning={isScanning} setIsScanning={setIsScanning}/>
       </CardFooter>
       <canvas ref={canvasRef} className="hidden" />
     </Card>
@@ -130,9 +130,10 @@ const CameraField = () => {
 interface FooterProps{
   uploadedImage: string | null;
   handleCapture: () => void;
+  isScanning: boolean;
   setIsScanning: (isScanning: boolean) => void;
 }
-const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, setIsScanning}) => {
+const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isScanning, setIsScanning}) => {
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
@@ -216,7 +217,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, setI
         <Button 
           className="w-full text-white" 
           onClick={handleScan}
-          disabled={!uploadedImage || !treeCode}
+          disabled={!uploadedImage || !treeCode || !isScanning}
         >
           Scan Image
         </Button>
