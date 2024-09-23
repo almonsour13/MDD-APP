@@ -217,7 +217,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isSc
         <Button 
           className="w-full text-white" 
           onClick={handleScan}
-          disabled={!uploadedImage || !treeCode || !isScanning}
+          disabled={!uploadedImage || !treeCode || isScanning}
         >
           Scan Image
         </Button>
