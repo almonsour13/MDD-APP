@@ -60,6 +60,15 @@ const config: Config = {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+		animation: {
+			scan: 'scan 2s ease-in-out infinite',
+		},
+		keyframes: {
+			scan: {
+			'0%, 100%': { transform: 'translateY(-100%)' },
+			'50%': { transform: 'translateY(100%)' },
+			},
+		},
 		
   	}
   },

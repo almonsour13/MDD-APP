@@ -8,19 +8,16 @@ import { Input } from "@/components/ui/input"
 import {  Image as LucideImage, Plus} from "lucide-react";
 import useIsMobile from '@/hooks/use-mobile';
 import Image from 'next/image'
-interface UploadImageProps {
-  uploadedImage: string | null;
-  setUploadedImage: (image: string | null) => void;
-}
 const UploadField = () =>{
     const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+    const [isScanning, setIsScanning] = useState(false)
     return(
         <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
           <CardContent className={`h-80 lg:h-80 p-0 flex border-none ${uploadedImage?"border-0":"border-2"} border-dashed border-spacing-2 border-secondary rounded-lg`}>
-            <UploadImage uploadedImage={uploadedImage} setUploadedImage={setUploadedImage}/>
+            <UploadImage uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} isScanning={isScanning}/>
           </CardContent>
           <CardFooter className='flex-1 p-0'>
-            <FooterContent uploadedImage={uploadedImage}/>
+            <FooterContent uploadedImage={uploadedImage} setIsScanning={setIsScanning}/>
           </CardFooter>
         </Card>
     )
@@ -28,8 +25,9 @@ const UploadField = () =>{
 interface UploadImageProps {
   uploadedImage: string | null;
   setUploadedImage: (image: string | null) => void;
+  isScanning: boolean;
 }
-const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedImage }) => {
+const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedImage, isScanning}) => {
   const [dragActive, setDragActive] = useState(false)
   const isMobile = useIsMobile()
 
@@ -72,6 +70,9 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
         <div className="flex-1 flex justify-center items-center h-full relative">
           <div className="h-80 w-80 overflow-hidden rounded-lg flex item-center justify-center relative">
             <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />             
+            {isScanning && (
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary to-transparent animate-scan" />
+            )}
             <Button
               onClick={handleRemoveImage}
               className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
@@ -131,14 +132,18 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
 }
 interface FooterProps{
   uploadedImage: string | null;
+  setIsScanning: (isScanning: boolean) => void;
 }
-const FooterContent:React.FC<FooterProps> = ({ uploadedImage }) => {
+const FooterContent:React.FC<FooterProps> = ({ uploadedImage, setIsScanning  }) => {
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
   
   const handleScan = () => {
-    
+    setIsScanning(true)
+    // setTimeout(() => {
+    //   setIsScanning(false)
+    // }, 3000) 
   }
   const toggleCustomTreeType = () => {
     setInputTreeCode(!isInputTreeCode)
@@ -207,7 +212,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage }) => {
       <Button 
         className="w-full text-white" 
         onClick={handleScan}
-        disabled={!uploadedImage || !treeCode}
+       // disabled={!uploadedImage || !treeCode}
       >
         Scan Image
       </Button>

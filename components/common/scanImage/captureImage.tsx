@@ -7,11 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Camera, Image as LucideImage, Plus, Check, Upload } from "lucide-react";
 
-interface UploadImageProps {
-  uploadedImage: string | null;
-  setUploadedImage: (image: string | null) => void;
-}
-
 const CameraField = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -19,6 +14,7 @@ const CameraField = () => {
   const [loading, setLoading] = useState(false)
   const [cameraActive, setCameraActive] = useState(false)
   const [focusSupported, setFocusSupported] = useState(false)
+  const [isScanning, setIsScanning] = useState(false)
 
   const startCamera = async () => {
     if (videoRef.current) {
@@ -88,6 +84,9 @@ const CameraField = () => {
             {uploadedImage ? (
               <div className="relative w-full h-full">
                 <img src={uploadedImage} alt="Captured" className="w-full h-full object-cover" />
+                {isScanning && (
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary to-transparent animate-scan" />
+                )}
                 <Button
                   onClick={handleCancel}
                   className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
@@ -121,7 +120,7 @@ const CameraField = () => {
         </div>
       </CardContent>
       <CardFooter className='flex-1 p-0'>
-        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture}/>
+        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} setIsScanning={setIsScanning}/>
       </CardFooter>
       <canvas ref={canvasRef} className="hidden" />
     </Card>
@@ -130,13 +129,15 @@ const CameraField = () => {
 interface FooterProps{
   uploadedImage: string | null;
   handleCapture: () => void;
+  setIsScanning: (isScanning: boolean) => void;
 }
-const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture }) => {
+const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, setIsScanning}) => {
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
   
   const handleScan = () => {
+    setIsScanning(true)
     
   }
   const toggleCustomTreeType = () => {
@@ -193,7 +194,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture }) =>
               onClick={toggleCustomTreeType}
               variant="outline"
               size="icon"
-              className="h-10 w-10"
+              className="flex-shrink-0 h-10 w-10"
             >
               <Plus className="h-4 w-4" />
               <span className="sr-only">
