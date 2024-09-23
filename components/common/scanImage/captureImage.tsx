@@ -56,6 +56,7 @@ const CameraField = () => {
 
   const handleCancel = () => {
     setUploadedImage(null)
+    setIsScanning(false);
   }
 
   const handleCapture = async () => {
