@@ -14,19 +14,19 @@ export default function Dashboard(){
     return(
         <PageWrapper>
             {/* Metric */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
               {[
                 { title: 'Total Mango Trees', value: '320', icon: Trees },
                 { title: 'Images Analyzed', value: '1,543', icon: ScanQrCode },
                 { title: 'Diseases Detected', value: '287', icon: Radar },
                 { title: 'Healthy Trees', value: '76%', icon: HeartPulse },
               ].map((item,index) => (
-                <Card key={index} x-chunk="dashboard-01-chunk-0  shadow-none">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Card key={index}>
+                <CardHeader className="flex h-16 flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     {item.title}
                   </CardTitle>
-                  <item.icon className="h-6 w-6 text-primary" />
+                  <item.icon className="h-6 w-6 text-primary hidden md:block" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{item.value}</div>

@@ -50,9 +50,9 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
       <div 
         className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 bg-primary-foreground dark:bg-background text-white transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 border-r`}
+        } transition-all duration-300 ease-in-out lg:relative lg:translate-x-0`}
       >
-        <div className="h-16 flex items-center justify-between p-4">
+        <div className="h-16 flex items-center justify-between px-4">
           <div className="flex gap-1 items-center justify-center">
             <Image
               src="/assets/icon/icon.png"

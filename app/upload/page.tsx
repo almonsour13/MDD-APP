@@ -6,7 +6,7 @@ import UploadField from '@/components/common/scanImage/uploadImage'
 
 const ScanImage = () => {
   return (
-    <Tabs defaultValue="upload" className="flex flex-col p-0 gap-2">
+    <Tabs defaultValue="upload" className="flex flex-col p-0">
       <TabsList className='flex'>
         <TabsTrigger className='flex-1' value="upload">
           Upload
