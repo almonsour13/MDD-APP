@@ -10,7 +10,7 @@ const PageWrapper: React.FC<PageWrapper> = ({
     return(
         <section 
         style={{ minHeight: 'calc(100vh - 64px)' }}
-        className="flex-1 border bg-white dark:bg-background gap-4 flex flex-col p-4 overflow-y-auto rounded-tl-3xl rounded-tr-3xl lg:rounded-tr-none"
+        className="flex-1 bg-white dark:bg-background gap-4 flex flex-col p-4 overflow-y-auto pb-20 md:pb-0"
         >
         {children}
         </section>

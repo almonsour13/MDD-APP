@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Camera, Image as LucideImage, Plus, Check, Upload } from "lucide-react";
-
+import Image from "next/image";
 const CameraField = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -84,7 +84,7 @@ const CameraField = () => {
           <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black">
             {uploadedImage ? (
               <div className="relative w-full h-full">
-                <img src={uploadedImage} alt="Captured" className="w-full h-full object-cover" />
+                <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />             
                 {isScanning && (
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
                 )}

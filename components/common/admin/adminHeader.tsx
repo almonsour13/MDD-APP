@@ -4,7 +4,7 @@ import { useTheme } from "next-themes"
 import { usePathname } from 'next/navigation'
 import Link from "next/link"
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
-import { Bell, Settings, Menu, User, Upload } from 'lucide-react'
+import { Bell, Settings, Menu, User, Scan } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -41,13 +41,13 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
   }, [pathname]);
 
   return (
-    <header className="bg-primary-foreground dark:bg-background shadow-sm">
+    <header className=" shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 md:h-16">
           <div className="flex items-center">
             <button
               onClick={toggleSidebar}
-              className="mr-4 text-foreground lg:hidden focus:outline-none focus:ring-2 focus:ring-primary text-white"
+              className="mr-4 text-foreground hidden md:block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary text-white"
               aria-label="Toggle sidebar"
             >
               <Menu className="h-6 w-6" />
@@ -57,11 +57,11 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
 
           <div className="flex items-center space-x-4">
             <Link
-              href="/admin/upload"
-              className="text-foreground hover:text-primary transition-colors text-white"
+              href="/admin/scan"
+              className="text-foreground hover:text-primary transition-colors text-white hidden md:block"
               aria-label="Upload"
             >
-              <Upload className="h-5 w-5" />
+              <Scan className="h-5 w-5" />
             </Link>
             
             {/* Desktop view: Show notification and dark mode toggle */}

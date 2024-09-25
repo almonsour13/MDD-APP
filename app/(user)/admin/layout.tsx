@@ -3,7 +3,7 @@ import { useState } from "react";
 import AdminHeader from "@/components/common/admin/adminHeader";
 import AdminSidebar from "@/components/common/admin/adminSidebar";
 import Dashboard from "./page";
-
+import AdminBottomNav from "@/components/common/admin/adminBottomNav";
 export default function AdminLayout({
   children,
 }: Readonly<{
@@ -17,6 +17,7 @@ export default function AdminLayout({
         <div className="w-full flex-1 flex flex-col overflow-hidden">
           <AdminHeader toggleSidebar={toggleSidebar}/>
           {children}
+          <AdminBottomNav/>
         </div>
       </div>
     );
