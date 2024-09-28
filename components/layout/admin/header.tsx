@@ -151,7 +151,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
                 </DropdownMenuSub>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-destructive">
-                  Log out
+                  <Link href="/signin">Log out</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

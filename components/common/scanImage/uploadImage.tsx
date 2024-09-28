@@ -171,7 +171,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
                   onClick={toggleCustomTreeType}
                   variant="outline"
                   size="icon"
-                  className="flex-shrink-0 h-10 w-10"
+                  className="flex-shrink-0 h-10 w-10 bg-primary"
                 >
                   <X className="h-4 w-4" />
                   <span className="sr-only">
@@ -213,7 +213,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
         )}
       </div>
       <Button 
-        className={`w-full text-white ${!uploadedImage || !treeCode || isScanning?"bg-primary-foreground":"bg-primary"}`}
+        className={`w-full ${!uploadedImage || !treeCode || isScanning?" bg-primary/50":" bg-primary"}`}
         onClick={handleScan}
         disabled={!uploadedImage || !treeCode || isScanning}
       >

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image';
 import { LucideIcon, X } from 'lucide-react'
-import { sidebarItems } from '@/app/config/sidebar-item';
+import { sidebarItems } from '@/config/sidebar-item';
 
 interface AdminSidebarProps {
   role: string;

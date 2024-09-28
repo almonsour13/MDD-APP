@@ -1,9 +1,10 @@
 "use client"
-import { useState } from "react";
-import AdminHeader from "@/components/layout/admin/adminHeader";
+import { Suspense, useState } from "react";
+import AdminHeader from "@/components/layout/admin/header";
 import AdminSidebar from "@/components/layout/sidebar";
 import Dashboard from "./page";
 import AdminBottomNav from "@/components/layout/admin/adminBottomNav";
+import Loading from "./loading";
 export default function AdminLayout({
   children,
 }: Readonly<{
@@ -17,7 +18,9 @@ export default function AdminLayout({
         <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} role={role}/>
         <div className="w-full flex-1 flex flex-col overflow-hidden">
           <AdminHeader toggleSidebar={toggleSidebar}/>
-          {children}
+          <Suspense fallback={<Loading/>}>
+            {children}
+          </Suspense>
           <AdminBottomNav role={role}/>
         </div>
       </div>

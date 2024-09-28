@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { MoreHorizontal, Scan, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { sidebarItems } from '@/app/config/sidebar-item';
+import { sidebarItems } from '@/config/sidebar-item';
 
 interface AdminBottomNavProps {
   role: string;
@@ -14,7 +14,17 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
   const pathname = usePathname();
   const items = sidebarItems(role);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
 
+    return () => {
+      document.body.style.overflow = ''; // Clean up when the component unmounts
+    };
+  }, [sidebarOpen]);
   const toggleMoreMenu = () => setSidebarOpen(!sidebarOpen);
 
   return (
@@ -36,7 +46,7 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
           <Link
             href={`/admin/scan`}
             className={`inline-flex h-10 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
-              pathname === 'scans' ? 'bg-primary text-primary-foreground' : ''
+              pathname === '/admin/scan' ? 'bg-primary text-primary-foreground' : ''
             }`}
             prefetch={true}
           >
@@ -55,7 +65,7 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
             </Link>
           ))}
           <button
-            className="inline-flex flex-col text-white h-10 rounded items-center justify-center hover:text-primary transition-colors"
+            className="inline-flex flex-col text-foreground h-10 rounded items-center justify-center hover:text-primary transition-colors"
             onClick={toggleMoreMenu}
           >
             <MoreHorizontal className="w-6 h-6" aria-hidden="true" />
@@ -67,6 +77,15 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
           />
         </div>
       </div>
+
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-60 z-40 lg:hidden transition-opacity duration-300 ease-in-out"
+          onClick={toggleMoreMenu}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 }
@@ -87,42 +106,33 @@ const MoreMenu: React.FC<MoreMenuProps> = ({ items, isOpen, toggleSidebar }) => 
   const pathname = usePathname();
 
   return (
-    <>
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+    <nav
+      className={`fixed bottom-0 z-50 p-4 h-auto w-full bg-primary-foreground dark:bg-background mt-6 space-y-4 rounded-t-lg transform ${
+        isOpen ? 'translate-y-0' : 'translate-y-full'
+      } transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0`}
+    >
+      <div className="w-full flex justify-end">
+        <button
           onClick={toggleSidebar}
-          aria-hidden="true"
-        />
-      )}
-      <nav
-        className={`absolute bottom-0 z-50 p-4 h-auto w-full bg-primary-foreground dark:bg-background mt-6 space-y-4 rounded-t-lg transform ${
-          isOpen ? '-translate-y-0' : 'translate-y-full'
-        } transition-all duration-300 ease-in-out lg:relative lg:translate-x-0`}
-      >
-        <div className="w-full flex justify-end">
-          <button
-            onClick={toggleSidebar}
-            className="lg:hidden focus:outline-none focus:ring-2 focus:ring-white text-white"
-            aria-label="Close sidebar"
-          >
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-        {items.map((item) => (
-          <Link
-            key={item.label}
-            href={`${item.href}`}
-            className={`w-full text-left text-foreground px-4 py-2 rounded-lg hover:text-primary transition-colors ${
-              pathname === item.href ? 'bg-primary text-primary-foreground' : ''
-            } flex items-center gap-3`}
-            prefetch={true}
-          >
-            <item.icon className="h-5 w-5" aria-hidden="true" />
-            <span>{item.label}</span>
-          </Link>
-        ))}
-      </nav>
-    </>
+          className="lg:hidden focus:outline-none focus:ring-2 focus:ring-white text-foreground"
+          aria-label="Close sidebar"
+        >
+          <X className="h-6 w-6" />
+        </button>
+      </div>
+      {items.map((item) => (
+        <Link
+          key={item.label}
+          href={`${item.href}`}
+          className={`w-full text-left text-foreground px-4 py-2 rounded-lg hover:text-primary transition-colors ${
+            pathname === item.href ? 'bg-primary text-primary-foreground' : ''
+          } flex items-center gap-3`}
+          prefetch={true}
+        >
+          <item.icon className="h-5 w-5" aria-hidden="true" />
+          <span>{item.label}</span>
+        </Link>
+      ))}
+    </nav>
   );
 };
