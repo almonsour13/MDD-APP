@@ -39,9 +39,9 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
     setPageTitle(title && title !== "Admin" ? title : 'Dashboard');
     document.title = `Admin | ${title && title !== "Admin" ? title : 'Dashboard'}`;
   }, [pathname]);
-
+//sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
   return (
-    <header className="fixed top-0 right-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-primary-foreground/80 dark:supports-[backdrop-filter]:bg-background/80">
+    <header className="fixed md:relative top-0 right-0 z-50 w-full backdrop-filter backdrop-blur supports-[backdrop-filter]:bg-muted/80 dark:supports-[backdrop-filter]:bg-muted/0">
         <div className="h-14 md:h-16 px-4 flex justify-between items-center">
           <div className="flex items-center">
             <button
@@ -51,13 +51,13 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <h1 className="text-xl lg:text-2xl font-semibold text-white ">{pageTitle}</h1>
+            <h1 className="text-xl lg:text-2xl font-bold text-foreground ">{pageTitle}</h1>
           </div>
 
           <div className="flex items-center space-x-4">
             <Link
               href="/admin/scan"
-              className="text-foreground hover:text-primary transition-colors text-white hidden md:block"
+              className="text-foreground hover:text-primary transition-colors hidden md:block"
               aria-label="Upload"
             >
               <Scan className="h-5 w-5" />
@@ -70,7 +70,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="relative text-white"
+                    className="relative text-foreground"
                     aria-label="Notifications"
                   >
                     <Bell className="h-5 w-5" />

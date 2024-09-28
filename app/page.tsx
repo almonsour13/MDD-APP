@@ -1,13 +1,13 @@
 'use client'
 
-import Header from "@/components/common/homepage/header"
+import Header from "@/components/layout/home/header"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Leaf, Camera, Zap, ImageUp,FileCheck,Smartphone, HandHelping } from "lucide-react"
 import { useEffect } from "react"
 import Image from "next/image"
-import Footer from "@/components/common/homepage/footer"
+import Footer from "@/components/layout/home/footer"
 import { useRouter } from 'next/navigation';
 export default function LandingPage() {
   const router = useRouter();
