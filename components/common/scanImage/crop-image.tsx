@@ -77,7 +77,7 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
   }, [completedCrop, onCropComplete])
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div className="relative h-80 lg:h-80 flex items-center justify-center">
       <ReactCrop
         crop={crop}
         onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -88,7 +88,7 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
           ref={imageRef}
           src={image}
           alt="Image to crop"
-          className="max-h-full max-w-full object-contain"
+          className="h-80  w-full rounded-md object-cover"
           width={1024}
           height={1024}
           onLoad={onImageLoad}
