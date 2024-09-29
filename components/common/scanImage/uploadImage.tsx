@@ -8,12 +8,14 @@ import { Input } from "@/components/ui/input"
 import {  Image as LucideImage, Plus} from "lucide-react";
 import useIsMobile from '@/hooks/use-mobile';
 import Image from 'next/image'
+import { ScanResultProvider, useScanResult, ScanResult } from "@/context/scan-result-context"
+
 const UploadField = () =>{
     const [uploadedImage, setUploadedImage] = useState<string | null>(null)
     const [isScanning, setIsScanning] = useState(false)
     return(
         <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
-          <CardContent className={`h-80 lg:h-80 p-0 flex border-none ${uploadedImage?"border-0":"border-2"} border-dashed border-spacing-2 border-secondary rounded-lg`}>
+          <CardContent className={`h-80 lg:h-80 p-0 flex border-none border-muted-foreground/40 ${uploadedImage?"border-0":"border-2"} border-dashed border-spacing-2 rounded-lg`}>
             <UploadImage uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} isScanning={isScanning} setIsScanning={setIsScanning} />
           </CardContent>
           <CardFooter className='flex-1 p-0'>
@@ -141,12 +143,28 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
+  const { scanResult, setScanResult } = useScanResult()
+  
   
   const handleScan = () => {
     setIsScanning(true)
-    // setTimeout(() => {
-    //   setIsScanning(false)
-    // }, 3000) 
+    setTimeout(() => {
+      setIsScanning(false)
+      setScanResult({
+        imageUrl: uploadedImage!,
+        treeCode:treeCode,
+        disease: "Anthracnose",
+        confidence: 85,
+        severity: "Moderate",
+        affectedArea: "30%",
+        recommendations: [
+          "Apply fungicide treatment",
+          "Improve air circulation around trees",
+          "Remove infected leaves and fruits"
+        ],
+        additionalInfo: "Anthracnose is caused by fungi of the genus Colletotrichum."
+      })
+    }, 2000)
   }
   const toggleCustomTreeType = () => {
     setInputTreeCode(!isInputTreeCode)

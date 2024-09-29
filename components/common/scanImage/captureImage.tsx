@@ -7,15 +7,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Camera, Image as LucideImage, Plus, Check, Upload } from "lucide-react";
 import Image from "next/image";
+import { ScanResultProvider, useScanResult, ScanResult } from "@/context/scan-result-context"
+import { tree } from "next/dist/build/templates/app-page";
+
 const CameraField = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [loading, setLoading] = useState(false)
   const [cameraActive, setCameraActive] = useState(false)
-  const [focusSupported, setFocusSupported] = useState(false)
   const [isScanning, setIsScanning] = useState(false)
-
   const startCamera = async () => {
     if (videoRef.current) {
       try {
@@ -76,12 +77,12 @@ const CameraField = () => {
 
     setLoading(false)
   }
-
   return (
-    <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
+    <>
+      <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
       <CardContent className={`h-80 lg:h-80 p-0 lg:p-4 flex rounded-xl border-none border-0`}>
         <div className="flex-1 flex justify-center items-center h-full relative">
-          <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black">
+          <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black text-primary-foreground">
             {uploadedImage ? (
               <div className="relative w-full h-full">
                 <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />             
@@ -106,13 +107,13 @@ const CameraField = () => {
                   className="w-full h-full object-cover"
                 />
                 {loading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <span className="text-white">Loading...</span>
+                  <div className="absolute inset-0 flex items-center justify-center bg-opacity-50">
+                    <span className="">Loading...</span>
                   </div>
                 )}
                 {!cameraActive && !loading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black">
-                    <span className="text-white">Camera not available</span>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="">Camera not available</span>
                   </div>
                 )}
               </>
@@ -124,7 +125,10 @@ const CameraField = () => {
         <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} isScanning={isScanning} setIsScanning={setIsScanning}/>
       </CardFooter>
       <canvas ref={canvasRef} className="hidden" />
-    </Card>
+      </Card>
+      {/* <ResultDisplay/> */}
+    </>
+    
   );
 };
 interface FooterProps{
@@ -137,10 +141,28 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isSc
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
+  const { scanResult, setScanResult } = useScanResult()
+
   
   const handleScan = () => {
     setIsScanning(true)
-    
+    setTimeout(() => {
+      setIsScanning(false)
+      setScanResult({
+        imageUrl: uploadedImage!,
+        treeCode:treeCode,
+        disease: "Anthracnose",
+        confidence: 85,
+        severity: "Moderate",
+        affectedArea: "30%",
+        recommendations: [
+          "Apply fungicide treatment",
+          "Improve air circulation around trees",
+          "Remove infected leaves and fruits"
+        ],
+        additionalInfo: "Anthracnose is caused by fungi of the genus Colletotrichum."
+      })
+    }, 2000)
   }
   const toggleCustomTreeType = () => {
     setInputTreeCode(!isInputTreeCode)

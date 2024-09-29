@@ -2,6 +2,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import UploadField from "@/components/common/scanImage/uploadImage";
 import CameraField from "@/components/common/scanImage/captureImage";
 import PageWrapper from "@/components/pageWrapper";
+import ResultDisplay from "@/components/common/scanImage/scan-result";
 export default function UploadImage(){
     return(
         <PageWrapper>

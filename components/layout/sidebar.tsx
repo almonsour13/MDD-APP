@@ -33,7 +33,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } transition-all duration-300 ease-in-out lg:relative lg:translate-x-0`}
       >
-        <div className="h-16 flex items-center justify-between px-4">
+        <div className="h-16 flex items-center justify-between px-6">
           <div className="flex gap-1 items-center justify-center">
             <Image
               src="/assets/icon/icon.png"
@@ -52,7 +52,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
             <X className="h-6 w-6" />
           </button>
         </div>
-        <nav className="px-4 mt-2 space-y-1">
+        <nav className="px-6 mt-2 space-y-1">
           {items.map((item) => (
             <Link
               key={item.label}

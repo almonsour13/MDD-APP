@@ -29,13 +29,13 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 z-50 w-full bg-primary-foreground/90 dark:bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-primary-foreground/95 dark:supports-[backdrop-filter]:bg-background/90 md:hidden">
-        <div className="grid grid-cols-5 gap-2 h-14 md:h-16 px-4 items-center justify-center relative">
+      <div className="fixed bottom-0 left-0 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90 md:hidden">
+        <div className="grid grid-cols-5 gap-8 h-14 md:h-16 px-6 py-2 items-center justify-center relative">
           {items.slice(0, 2).map((item) => (
             <Link
               key={item.label}
               href={`${item.href}`}
-              className={`inline-flex h-10 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
+              className={`inline-flex h-10 rounded-lg flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
                 pathname === item.href ? 'bg-primary text-primary-foreground' : ''
               }`}
               prefetch={true}
@@ -45,7 +45,7 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
           ))}
           <Link
             href={`/admin/scan`}
-            className={`inline-flex h-10 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
+            className={`inline-flex h-8 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
               pathname === '/admin/scan' ? 'bg-primary text-primary-foreground' : ''
             }`}
             prefetch={true}
@@ -81,7 +81,7 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
       {/* Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-60 z-40 lg:hidden transition-opacity duration-300 ease-in-out"
+          className="fixed inset-0 bg-black bg-opacity-60 z-30 lg:hidden transition-opacity duration-300 ease-in-out"
           onClick={toggleMoreMenu}
           aria-hidden="true"
         />
@@ -107,7 +107,7 @@ const MoreMenu: React.FC<MoreMenuProps> = ({ items, isOpen, toggleSidebar }) => 
 
   return (
     <nav
-      className={`fixed bottom-0 z-50 p-4 h-auto w-full bg-primary-foreground dark:bg-background mt-6 space-y-4 rounded-t-lg transform ${
+      className={`fixed bottom-0 z-50 p-6 h-auto w-full bg-primary-foreground dark:bg-background mt-6 space-y-4 rounded-t-lg transform ${
         isOpen ? 'translate-y-0' : 'translate-y-full'
       } transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0`}
     >
