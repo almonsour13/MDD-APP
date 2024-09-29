@@ -1,14 +1,16 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import {  Image as LucideImage, Plus} from "lucide-react";
+import {  Image as LucideImage, Plus, Crop,Check} from "lucide-react";
 import useIsMobile from '@/hooks/use-mobile';
 import Image from 'next/image'
 import { ScanResultProvider, useScanResult, ScanResult } from "@/context/scan-result-context"
+import ImageCropper from "./crop-image";
+import ReactCrop, { Crop as CropType, PixelCrop } from 'react-image-crop'
 
 const UploadField = () =>{
     const [uploadedImage, setUploadedImage] = useState<string | null>(null)
@@ -32,6 +34,8 @@ interface UploadImageProps {
 }
 const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedImage, isScanning, setIsScanning}) => {
   const [dragActive, setDragActive] = useState(false)
+  const [isCropping, setIsCropping] = useState(false)
+  
   const isMobile = useIsMobile()
 
   const handleDrag = (e: React.DragEvent) => {
@@ -68,22 +72,47 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
     setUploadedImage(null)
     setIsScanning(false)
   }
+  const handleCropComplete = useCallback((croppedImage: string) => {
+    setUploadedImage(croppedImage)
+    setIsCropping(false)
+  }, [])
   return (
     <>
       {uploadedImage ? (
         <div className="flex-1 flex justify-center items-center h-full relative">
           <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex item-center justify-center relative">
-            <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />             
-            {isScanning && (
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+            {isCropping?(
+              <>
+                <ImageCropper
+                  image={uploadedImage!}
+                  onCropComplete={handleCropComplete}
+                  onCropCancel={() => setIsCropping(false)}
+                />
+              </>
+            ):(
+              <>
+                <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />
+                {isScanning && (
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+                )}
+                <Button
+                  onClick={handleRemoveImage}
+                  className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
+                  variant="secondary"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </>
+            )}  
+            {!isScanning && !isCropping && (
+              <Button
+                onClick={() => setIsCropping(true)}
+                className="absolute z-20 bottom-0 right-0 m-2 rounded-full h-8 w-8 p-0"
+                variant="secondary"
+              >
+                <Crop className="h-5 w-5" />
+              </Button>
             )}
-            <Button
-              onClick={handleRemoveImage}
-              className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
-              variant="secondary"
-            >
-              <X className="h-5 w-5" />
-            </Button>
           </div>
         </div>
       ) : (

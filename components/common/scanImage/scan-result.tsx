@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertCircle, Info, X, Save, Trash2, Trees } from "lucide-react"
+import { AlertCircle, Info, X, Save, Trash2, Trees,ZoomIn } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -9,19 +9,19 @@ import { useEffect, useState } from "react"
 import { toast } from "@/hooks/use-toast"
 import { useScanResult } from "@/context/scan-result-context"
 import Image from "next/image"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function ResultDisplay() {
   const { scanResult, setScanResult } = useScanResult()
   const [isVisible, setIsVisible] = useState(false)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [showImageDialog, setShowImageDialog] = useState(false)
 
   useEffect(() => {
     if (scanResult) {
@@ -104,14 +104,32 @@ export default function ResultDisplay() {
           </Button>
         </CardHeader>
         <CardContent className="flex flex-col md:flex-row gap-4 gap-y-4">
-          <div className="h-80 md:h-96  md:w-96 relative rounded-lg overflow-hidden">
-              <Image
-                src={imageUrl || ""}
-                alt="Scanned mango leaf"
-                layout="fill"
-                objectFit="cover"
-                className="aspect-square"
-              />
+          <div className="h-64 md:h-72 md:w-72 relative rounded-lg overflow-hidden shadow-md border border-gray-200">
+            <Image
+              src={imageUrl || ""}
+              alt="Scanned mango leaf"
+              layout="fill"
+              objectFit="cover"
+              className="aspect-square cursor-pointer"
+              onClick={() => setShowImageDialog(true)}
+            />
+            <div className="absolute bottom-2 right-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="secondary" onClick={() => setShowImageDialog(true)}>
+                      <ZoomIn className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Click to zoom</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
+              {affectedArea} affected
+            </div>
           </div>
           <div className="flex-1 flex flex-col gap-4 border p-4 rounded-lg">
             <div className="flex items-center space-x-2">
@@ -188,6 +206,21 @@ export default function ResultDisplay() {
               Discard
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={showImageDialog} onOpenChange={setShowImageDialog}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Detailed View</DialogTitle>
+          </DialogHeader>
+          <div className="relative h-[60vh]">
+            <Image
+              src={imageUrl || ""}
+              alt="Detailed view of scanned mango leaf"
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </>

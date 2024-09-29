@@ -1,14 +1,14 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Camera, Image as LucideImage, Plus, Check, Upload } from "lucide-react";
+import { Camera, Image as LucideImage, Plus, Check, Upload,Crop } from "lucide-react";
 import Image from "next/image";
 import { ScanResultProvider, useScanResult, ScanResult } from "@/context/scan-result-context"
-import { tree } from "next/dist/build/templates/app-page";
+import ImageCropper from "./crop-image";
 
 const CameraField = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
@@ -17,6 +17,7 @@ const CameraField = () => {
   const [loading, setLoading] = useState(false)
   const [cameraActive, setCameraActive] = useState(false)
   const [isScanning, setIsScanning] = useState(false)
+  const [isCropping, setIsCropping] = useState(false)
   const startCamera = async () => {
     if (videoRef.current) {
       try {
@@ -55,7 +56,7 @@ const CameraField = () => {
     }
   }, [uploadedImage])
 
-  const handleCancel = () => {
+  const handleRemoveImage = () => {
     setUploadedImage(null)
     setIsScanning(false);
   }
@@ -77,6 +78,11 @@ const CameraField = () => {
 
     setLoading(false)
   }
+  
+  const handleCropComplete = useCallback((croppedImage: string) => {
+    setUploadedImage(croppedImage)
+    setIsCropping(false)
+  }, [])
   return (
     <>
       <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
@@ -85,17 +91,38 @@ const CameraField = () => {
           <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black text-primary-foreground">
             {uploadedImage ? (
               <div className="relative w-full h-full">
-                <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />             
-                {isScanning && (
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+                {isCropping?(
+                  <>
+                    <ImageCropper
+                      image={uploadedImage!}
+                      onCropComplete={handleCropComplete}
+                      onCropCancel={() => setIsCropping(false)}
+                    />
+                  </>
+                ):(
+                  <>
+                    <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />
+                    {isScanning && (
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+                    )}
+                    <Button
+                      onClick={handleRemoveImage}
+                      className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
+                      variant="secondary"
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </>
+                )}  
+                {!isScanning && !isCropping && (
+                  <Button
+                    onClick={() => setIsCropping(true)}
+                    className="absolute z-20 bottom-0 right-0 m-2 rounded-full h-8 w-8 p-0"
+                    variant="secondary"
+                  >
+                    <Crop className="h-5 w-5" />
+                  </Button>
                 )}
-                <Button
-                  onClick={handleCancel}
-                  className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
-                  variant="secondary"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
               </div>
             ) : (
               <>
