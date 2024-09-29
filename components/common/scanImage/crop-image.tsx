@@ -6,6 +6,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import { Button } from '@/components/ui/button'
 import { Check, X } from 'lucide-react'
 import Image from 'next/image'
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 interface ImageCropperProps {
   image: string
@@ -18,11 +19,13 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const imageRef = useRef<HTMLImageElement>(null)
 
+  // On Image Load, set initial crop
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const { width, height } = e.currentTarget
     setCrop({ unit: '%', width: 90, height: 90, x: 5, y: 5 })
   }, [])
 
+  // Crop the image and return the cropped version
   const cropImage = useCallback(() => {
     if (imageRef.current && completedCrop) {
       const image = imageRef.current
@@ -77,29 +80,49 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
   }, [completedCrop, onCropComplete])
 
   return (
-    <div className="relative h-80 lg:h-80 flex items-center justify-center">
-      <ReactCrop
-        crop={crop}
-        onChange={(_, percentCrop) => setCrop(percentCrop)}
-        onComplete={(c) => setCompletedCrop(c)}
-        aspect={1}
-      >
-        <Image
-          ref={imageRef}
-          src={image}
-          alt="Image to crop"
-          className="h-80  w-full rounded-md object-cover"
-          width={1024}
-          height={1024}
-          onLoad={onImageLoad}
-        />
-      </ReactCrop>
-        <Button className='absolute top-4 right-4 rounded-full' onClick={onCropCancel} variant="destructive" size="icon">
-          <X className="h-4 w-4" />
-        </Button>
-        <Button className='absolute bottom-4 right-4 rounded-full' onClick={cropImage} variant="default" size="icon">
-          <Check className="h-4 w-4" />
-        </Button>
-    </div>
+    <Dialog open={true} onOpenChange={onCropCancel}> {/* Dialog for modal behavior */}
+      <DialogContent className="">
+        <DialogHeader>
+          <DialogTitle>Crop Your Image</DialogTitle>
+          <DialogDescription>
+            Adjust the crop and click confirm when you're done.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="relative h-80 lg:h-80 flex items-center justify-center">
+          <ReactCrop
+            crop={crop}
+            onChange={(_, percentCrop) => setCrop(percentCrop)}
+            onComplete={(c) => setCompletedCrop(c)}
+            aspect={1} // Square aspect ratio
+          >
+            <Image
+              ref={imageRef}
+              src={image}
+              alt="Image to crop"
+              className="h-80 w-auto rounded-md object-cover"
+              width={1024}
+              height={1024}
+              onLoad={onImageLoad}
+            />
+          </ReactCrop>
+        </div>
+
+        {/* Footer containing Cancel and Confirm buttons */}
+        <DialogFooter>
+          {/* Cancel Button */}
+          <Button variant="destructive" onClick={onCropCancel}>
+            <X className="h-4 w-4 mr-2" />
+            Cancel
+          </Button>
+
+          {/* Crop Confirm Button */}
+          <Button onClick={cropImage}>
+            <Check className="h-4 w-4 mr-2" />
+            Save
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

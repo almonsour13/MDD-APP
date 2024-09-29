@@ -80,7 +80,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
     <>
       {uploadedImage ? (
         <div className="flex-1 flex justify-center items-center h-full relative">
-          <div className="h-80 w-80 overflow-hidden rounded-lg flex item-center justify-center relative">
+          <div className="h-80 w-auto overflow-hidden rounded-lg flex item-center justify-center relative">
             {isCropping?(
               <>
                 <ImageCropper
@@ -91,7 +91,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
               </>
             ):(
               <>
-                <Image src={uploadedImage} alt="Uploaded" className="h-80  w-80 rounded-md object-cover" width={256} height={256} />
+                <Image src={uploadedImage} alt="Uploaded" className="h-80  w-auto rounded-md object-cover" width={256} height={256} />
                 {isScanning && (
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
                 )}
