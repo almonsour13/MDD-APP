@@ -15,7 +15,7 @@ const UploadField = () =>{
     const [isScanning, setIsScanning] = useState(false)
     return(
         <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
-          <CardContent className={`h-80 lg:h-80 p-0 flex border-none border-muted-foreground/40 ${uploadedImage?"border-0":"border-2"} border-dashed border-spacing-2 rounded-lg`}>
+          <CardContent className={`h-80 lg:h-80 p-0 flex border-none border-muted-foreground/40 ${uploadedImage?"border-0":"border"} border-dashed border-spacing-10 rounded-lg`}>
             <UploadImage uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} isScanning={isScanning} setIsScanning={setIsScanning} />
           </CardContent>
           <CardFooter className='flex-1 p-0'>
@@ -72,7 +72,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
     <>
       {uploadedImage ? (
         <div className="flex-1 flex justify-center items-center h-full relative">
-          <div className="h-80 w-80 overflow-hidden rounded-lg flex item-center justify-center relative">
+          <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex item-center justify-center relative">
             <Image src={uploadedImage} alt="Uploaded" className="h-80  w-full rounded-md object-cover" width={256} height={256} />             
             {isScanning && (
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />

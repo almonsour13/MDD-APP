@@ -85,24 +85,26 @@ export default function ResultDisplay() {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
+        className={`fixed inset-0 top-0 z-40 bg-black transition-opacity duration-300 ease-in-out ${
           isVisible ? 'bg-opacity-60' : 'bg-opacity-0 pointer-events-none'
         }`}
+        onClick={handleClose}
         aria-hidden="true"
       />
       <Card 
-        className={`absolute bottom-0 m-0 left-0 right-0 z-50 rounded-b-none rounded-t-xl border-0 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-in-out ${
+      //md:left-4 right-0 md:right-4
+        className={`absolute border-b bottom-0 m-0 left-0 right-0 z-50 rounded-b-none rounded-t-xl border-0 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-in-out ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
         }`}
       >
-        <CardHeader className="flex flex-row items-center justify-between top-0 bg-background z-10">
+        <CardHeader className="flex flex-row items-center justify-between top-0 z-10">
           <CardTitle className="text-xl font-semibold ">Scan Result</CardTitle>
           <Button variant="ghost" size="icon" onClick={handleClose}>
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
         <CardContent className="flex flex-col md:flex-row gap-4 gap-y-4">
-          <div className="h-96 w-full md:w-96 relative rounded-lg overflow-hidden">
+          <div className="h-80 md:h-96  md:w-96 relative rounded-lg overflow-hidden">
               <Image
                 src={imageUrl || ""}
                 alt="Scanned mango leaf"
@@ -159,7 +161,7 @@ export default function ResultDisplay() {
             </Alert>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end space-x-2 sticky bottom-0 bg-background z-10 pt-4 pb-6">
+        <CardFooter className="flex justify-end space-x-2 bottom-0 z-10">
           <Button variant="destructive" onClick={handleClose}>
             <Trash2 className="mr-2 h-4 w-4" />
             Discard

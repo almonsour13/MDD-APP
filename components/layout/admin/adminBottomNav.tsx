@@ -30,13 +30,13 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
   return (
     <>
       <div className="fixed bottom-0 left-0 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90 md:hidden">
-        <div className="grid grid-cols-5 gap-8 h-14 md:h-16 px-6 py-2 items-center justify-center relative">
+        <div className="grid grid-cols-5 gap-4 h-14 md:h-16 px-4 py-2 items-center justify-center relative">
           {items.slice(0, 2).map((item) => (
             <Link
               key={item.label}
               href={`${item.href}`}
               className={`inline-flex h-10 rounded-lg flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
-                pathname === item.href ? 'bg-primary text-primary-foreground' : ''
+                pathname === item.href ? 'bg-primary text-primary-foreground hover:text-white' : ''
               }`}
               prefetch={true}
             >
@@ -45,8 +45,8 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
           ))}
           <Link
             href={`/admin/scan`}
-            className={`inline-flex h-8 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
-              pathname === '/admin/scan' ? 'bg-primary text-primary-foreground' : ''
+            className={`inline-flex h-10 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
+              pathname === '/admin/scan' ? 'bg-primary text-primary-foreground hover:text-white' : ''
             }`}
             prefetch={true}
           >
@@ -57,7 +57,7 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
               key={item.label}
               href={`${item.href}`}
               className={`inline-flex flex-col text-foreground h-10 rounded items-center justify-center hover:text-primary transition-colors ${
-                pathname === item.href ? 'bg-primary text-primary-foreground' : ''
+                pathname === item.href ? 'bg-primary text-primary-foreground hover:text-white' : ''
               }`}
               prefetch={true}
             >

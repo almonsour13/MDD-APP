@@ -17,7 +17,8 @@ export default function AdminLayout({
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
     const role = "admin";
     return (
-      <div className="flex h-auto lg:h-screen relative bg-muted/80 dark:bg-muted/20 ">
+      //bg-background md:bg-muted/80 dark:bg-background md:dark:bg-muted/20
+      <div className="flex h-auto lg:h-screen relative">
         <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} role={role}/>
         <div className="w-full flex-1 flex flex-col overflow-hidden relative">
           <AdminHeader toggleSidebar={toggleSidebar}/>

@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className+" font-san"}>
+      <body className={inter.className+" font-san bg-background md:bg-gradient-to-tr  from-primary/0 via-primary/10 to-primary/5"}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
