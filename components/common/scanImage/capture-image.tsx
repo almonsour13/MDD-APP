@@ -24,7 +24,7 @@ const CameraField = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             //facingMode: "user"
-            facingMode: { exact: "environment" }
+            facingMode: { exact: "user" }
           }
         })
         videoRef.current.srcObject = stream
@@ -62,21 +62,30 @@ const CameraField = () => {
   }
 
   const handleCapture = async () => {
-    setLoading(true)
-    const canvas = canvasRef.current
-    const video = videoRef.current
-
+    setLoading(true);
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+  
     if (canvas && video) {
-      const context = canvas.getContext("2d")
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      context?.drawImage(video, 0, 0)
-      const imageData = canvas.toDataURL("image/png")
-      setUploadedImage(imageData)
-      stopCamera()
+      const context = canvas.getContext("2d");
+  
+      const size = Math.min(video.videoWidth, video.videoHeight);
+  
+      canvas.width = size;
+      canvas.height = size;
+  
+      const xOffset = (video.videoWidth - size) / 2;
+      const yOffset = (video.videoHeight - size) / 2;
+  
+      context?.drawImage(video, xOffset, yOffset, size, size, 0, 0, size, size);
+      
+      const imageData = canvas.toDataURL("image/png");
+      setUploadedImage(imageData);
+      stopCamera();
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
+  
   
   const handleCropComplete = useCallback((croppedImage: string) => {
     setUploadedImage(croppedImage)
@@ -100,7 +109,7 @@ const CameraField = () => {
                   </>
                 ):(
                   <>
-                    <Image src={uploadedImage} alt="Uploaded" className="h-80  w-80 rounded-md object-cover" width={256} height={256} />
+                    <Image src={uploadedImage} alt="Uploaded" className="h-80 w-full md:w-80 rounded-md object-cover" width={256} height={256} />
                     {isScanning && (
                       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
                     )}
@@ -130,7 +139,7 @@ const CameraField = () => {
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-cover"
+                  className="h-80 w-full md:w-80 object-cover"
                 />
                 {loading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-opacity-50">

@@ -91,7 +91,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
               </>
             ):(
               <>
-                <Image src={uploadedImage} alt="Uploaded" className="h-80  w-auto rounded-md object-cover" width={256} height={256} />
+                <Image src={uploadedImage} alt="Uploaded" className="h-80 w-auto rounded-md object-cover" width={256} height={256} />
                 {isScanning && (
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
                 )}

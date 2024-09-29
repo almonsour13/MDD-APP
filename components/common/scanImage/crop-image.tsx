@@ -85,11 +85,11 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
         <DialogHeader>
           <DialogTitle>Crop Your Image</DialogTitle>
           <DialogDescription>
-            Adjust the crop and click confirm when you're done.
+            Adjust the crop and click save when you're done.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="relative h-80 lg:h-80 flex items-center justify-center">
+        <div className="relative w-full flex items-center justify-center">
           <ReactCrop
             crop={crop}
             onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -100,25 +100,23 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
               ref={imageRef}
               src={image}
               alt="Image to crop"
-              className="h-80 w-auto rounded-md object-cover"
+              className=" w-auto rounded-md object-cover"
               width={1024}
               height={1024}
               onLoad={onImageLoad}
             />
           </ReactCrop>
         </div>
-
-        {/* Footer containing Cancel and Confirm buttons */}
-        <DialogFooter>
+        <DialogFooter className='flex flex-row'>
           {/* Cancel Button */}
-          <Button variant="destructive" onClick={onCropCancel}>
-            <X className="h-4 w-4 mr-2" />
+          <Button className='flex-1' variant="destructive" onClick={onCropCancel}>
+            {/* <X className="h-4 w-4 mr-2" /> */}
             Cancel
           </Button>
 
           {/* Crop Confirm Button */}
-          <Button onClick={cropImage}>
-            <Check className="h-4 w-4 mr-2" />
+          <Button className='flex-1' onClick={cropImage}>
+            {/* <Check className="h-4 w-4 mr-2" /> */}
             Save
           </Button>
         </DialogFooter>

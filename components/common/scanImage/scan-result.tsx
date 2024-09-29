@@ -93,7 +93,7 @@ export default function ResultDisplay() {
       />
       <Card 
       //md:left-4 right-0 md:right-4
-        className={`absolute border-b bottom-0 m-0 left-0 right-0 z-50 rounded-b-none rounded-t-xl border-0 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-in-out ${
+        className={`absolute border-b bottom-0 m-0 left-0 right-0 z-50 rounded-lg rounded-b-none rounded-t border-0 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-in-out ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
         }`}
       >
@@ -104,7 +104,7 @@ export default function ResultDisplay() {
           </Button>
         </CardHeader>
         <CardContent className="flex flex-col md:flex-row gap-4 gap-y-4">
-          <div className="h-64 md:h-72 md:w-72 relative rounded-lg overflow-hidden shadow-md border border-gray-200">
+          <div className="h-64 md:h-72 md:w-72 relative rounded-lg overflow-hidden shadow-md">
             <Image
               src={imageUrl || ""}
               alt="Scanned mango leaf"
