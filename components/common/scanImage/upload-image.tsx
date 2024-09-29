@@ -72,10 +72,13 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
     setUploadedImage(null)
     setIsScanning(false)
   }
-  const handleCropComplete = useCallback((croppedImage: string) => {
-    setUploadedImage(croppedImage)
-    setIsCropping(false)
-  }, [])
+  const handleCropComplete = useCallback(
+    (croppedImage: string) => {
+      setUploadedImage(croppedImage);
+      setIsCropping(false);
+    },
+    [setUploadedImage] 
+  );
   return (
     <>
       {uploadedImage ? (

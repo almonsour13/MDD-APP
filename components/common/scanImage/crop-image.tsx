@@ -4,40 +4,37 @@ import { useState, useRef, useCallback } from 'react'
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { Button } from '@/components/ui/button'
-import { Check, X } from 'lucide-react'
-import Image from 'next/image'
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import Image from 'next/image'
 
 interface ImageCropperProps {
   image: string
   onCropComplete: (croppedImage: string) => void
   onCropCancel: () => void
+  aspect?: number // Optional aspect ratio prop
 }
 
-export default function ImageCropper({ image, onCropComplete, onCropCancel }: ImageCropperProps) {
-  const [crop, setCrop] = useState<Crop>()
+export default function ImageCropper({ image, onCropComplete, onCropCancel, aspect = 1 }: ImageCropperProps) {
+  const [crop, setCrop] = useState<Crop>({ unit: '%', width: 90, height: 90, x: 5, y: 5 })
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const imageRef = useRef<HTMLImageElement>(null)
+  const [loading, setLoading] = useState(true)
 
-  // On Image Load, set initial crop
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
-    const { width, height } = e.currentTarget
-    setCrop({ unit: '%', width: 90, height: 90, x: 5, y: 5 })
+    setLoading(false)
   }, [])
 
-  // Crop the image and return the cropped version
   const cropImage = useCallback(() => {
     if (imageRef.current && completedCrop) {
-      const image = imageRef.current
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
 
       if (!ctx) {
-        throw new Error('No 2d context')
+        throw new Error('No 2D context')
       }
 
-      const scaleX = image.naturalWidth / image.width
-      const scaleY = image.naturalHeight / image.height
+      const scaleX = imageRef.current.naturalWidth / imageRef.current.width
+      const scaleY = imageRef.current.naturalHeight / imageRef.current.height
       const pixelRatio = window.devicePixelRatio
 
       canvas.width = completedCrop.width * scaleX * pixelRatio
@@ -50,7 +47,7 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
       const cropY = completedCrop.y * scaleY
 
       ctx.drawImage(
-        image,
+        imageRef.current,
         cropX,
         cropY,
         completedCrop.width * scaleX,
@@ -61,62 +58,53 @@ export default function ImageCropper({ image, onCropComplete, onCropCancel }: Im
         completedCrop.height * scaleY
       )
 
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) {
-            console.error('Canvas is empty')
-            return
-          }
+      canvas.toBlob(blob => {
+        if (blob) {
           const reader = new FileReader()
           reader.readAsDataURL(blob)
           reader.onloadend = () => {
             onCropComplete(reader.result as string)
           }
-        },
-        'image/jpeg',
-        1
-      )
+        } else {
+          console.error('Canvas is empty')
+        }
+      }, 'image/jpeg', 1)
     }
   }, [completedCrop, onCropComplete])
 
   return (
-    <Dialog open={true} onOpenChange={onCropCancel}> {/* Dialog for modal behavior */}
-      <DialogContent className="">
+    <Dialog open={true} onOpenChange={onCropCancel}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Crop Your Image</DialogTitle>
-          <DialogDescription>
-            Adjust the crop and click save when you're done.
-          </DialogDescription>
+          <DialogDescription>Adjust the crop and click save when you&apos;re done.</DialogDescription> {/* Escaped apostrophe */}
         </DialogHeader>
 
         <div className="relative w-full flex items-center justify-center">
+          {loading && <p>Loading...</p>} {/* Loading indicator */}
           <ReactCrop
             crop={crop}
             onChange={(_, percentCrop) => setCrop(percentCrop)}
             onComplete={(c) => setCompletedCrop(c)}
-            aspect={1} // Square aspect ratio
+            aspect={aspect} // Dynamic aspect ratio
           >
             <Image
               ref={imageRef}
               src={image}
               alt="Image to crop"
-              className=" w-auto rounded-md object-cover"
+              className="w-auto rounded-md object-cover"
               width={1024}
               height={1024}
               onLoad={onImageLoad}
             />
           </ReactCrop>
         </div>
+        
         <DialogFooter className='flex flex-row'>
-          {/* Cancel Button */}
-          <Button className='flex-1' variant="destructive" onClick={onCropCancel}>
-            {/* <X className="h-4 w-4 mr-2" /> */}
+          <Button className='flex-1' variant="destructive" onClick={onCropCancel} aria-label="Cancel cropping">
             Cancel
           </Button>
-
-          {/* Crop Confirm Button */}
-          <Button className='flex-1' onClick={cropImage}>
-            {/* <Check className="h-4 w-4 mr-2" /> */}
+          <Button className='flex-1' onClick={cropImage} aria-label="Save cropped image">
             Save
           </Button>
         </DialogFooter>
