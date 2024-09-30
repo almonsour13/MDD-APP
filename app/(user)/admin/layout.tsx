@@ -7,7 +7,6 @@ import Loading from "./loading";
 import { ScanResultProvider } from "@/context/scan-result-context";
 import ResultDisplay from "@/components/common/scanImage/scan-result";
 import { Toaster } from "@/components/ui/toaster";
-
 export default function AdminLayout({
   children,
 }: Readonly<{

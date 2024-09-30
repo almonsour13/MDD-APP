@@ -35,6 +35,13 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
       >
         <div className="h-16 flex items-center justify-between px-4">
           <div className="flex gap-1 items-center justify-center">
+            {/* <Image
+              src="/assets/gif/loading.gif"
+              alt="icon"
+              width={48}
+              height={48}
+              className="w-10 h-10"
+            /> */}
             <Image
               src="/assets/icon/icon.png"
               alt="icon"

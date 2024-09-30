@@ -24,7 +24,7 @@ const CameraField = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             //facingMode: "user"
-            facingMode: { exact: "user" }
+            facingMode: { exact: "environment" }
           }
         })
         videoRef.current.srcObject = stream
@@ -113,24 +113,30 @@ const CameraField = () => {
                     {isScanning && (
                       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
                     )}
-                    <Button
-                      onClick={handleRemoveImage}
-                      className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
-                      variant="secondary"
-                    >
-                      <X className="h-5 w-5" />
-                    </Button>
                   </>
-                )}  
-                {!isScanning && !isCropping && (
-                  <Button
-                    onClick={() => setIsCropping(true)}
-                    className="absolute z-20 bottom-0 right-0 m-2 rounded-full h-8 w-8 p-0"
-                    variant="secondary"
-                  >
-                    <Crop className="h-5 w-5" />
-                  </Button>
                 )}
+                <div className="absolute top-2 right-2 flex space-x-2">
+                  {!isScanning && !isCropping && (
+                    <Button
+                      onClick={() => setIsCropping(true)}
+                      size="icon"
+                      variant="secondary"
+                      className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
+                    >
+                      <Crop className="h-4 w-4" />
+                      <span className="sr-only">Crop image</span>
+                    </Button>
+                  )}
+                  <Button
+                    onClick={handleRemoveImage}
+                    size="icon"
+                    variant="secondary"
+                    className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
+                  >
+                    <X className="h-4 w-4" />
+                    <span className="sr-only">Remove image</span>
+                  </Button>
+                </div>  
               </div>
             ) : (
               <>
@@ -157,7 +163,7 @@ const CameraField = () => {
         </div>
       </CardContent>
       <CardFooter className='flex-1 p-0'>
-        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} isScanning={isScanning} setIsScanning={setIsScanning}/>
+        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} isScanning={isScanning} setIsScanning={setIsScanning} cameraActive={cameraActive}/>
       </CardFooter>
       <canvas ref={canvasRef} className="hidden" />
       </Card>
@@ -171,8 +177,9 @@ interface FooterProps{
   handleCapture: () => void;
   isScanning: boolean;
   setIsScanning: (isScanning: boolean) => void;
+  cameraActive:boolean;
 }
-const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isScanning, setIsScanning}) => {
+const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isScanning, setIsScanning,cameraActive}) => {
   const [treeCodeInput, setTreeCodeInput] = useState("")
   const [treeCode, setTreeCode] = useState("")
   const [isInputTreeCode, setInputTreeCode] = useState(false)
@@ -267,6 +274,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isSc
           <Button 
             className="w-full bg-primary text-white" 
             onClick={handleCapture}
+            disabled={!cameraActive}
           >
             Capture Image
           </Button>

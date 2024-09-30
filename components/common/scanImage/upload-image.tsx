@@ -96,26 +96,43 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
               <>
                 <Image src={uploadedImage} alt="Uploaded" className="h-80 w-auto rounded-md object-cover" width={256} height={256} />
                 {isScanning && (
+                  <>
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+                  <div className="absolute flex items-center justify-center bg-primary/40 w-full h-full">
+                    <Image
+                    src="/assets/gif/loading.gif"
+                    alt="icon"
+                    width={200}
+                    height={200}
+                  />
+                  </div>
+                  </>
                 )}
-                <Button
-                  onClick={handleRemoveImage}
-                  className="absolute z-20 top-0 right-0 m-2 rounded-full h-8 w-8 p-0"
-                  variant="secondary"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
+                
               </>
             )}  
-            {!isScanning && !isCropping && (
+            <div className="absolute top-2 right-2 flex space-x-2">
+              {!isScanning && !isCropping && (
+                <Button
+                  onClick={() => setIsCropping(true)}
+                  size="icon"
+                  variant="secondary"
+                  className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
+                >
+                  <Crop className="h-4 w-4" />
+                  <span className="sr-only">Crop image</span>
+                </Button>
+              )}
               <Button
-                onClick={() => setIsCropping(true)}
-                className="absolute z-20 bottom-0 right-0 m-2 rounded-full h-8 w-8 p-0"
+                onClick={handleRemoveImage}
+                size="icon"
                 variant="secondary"
+                className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
               >
-                <Crop className="h-5 w-5" />
+                <X className="h-4 w-4" />
+                <span className="sr-only">Remove image</span>
               </Button>
-            )}
+            </div>
           </div>
         </div>
       ) : (
@@ -196,7 +213,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
         ],
         additionalInfo: "Anthracnose is caused by fungi of the genus Colletotrichum."
       })
-    }, 2000)
+    }, 5000)
   }
   const toggleCustomTreeType = () => {
     setInputTreeCode(!isInputTreeCode)
