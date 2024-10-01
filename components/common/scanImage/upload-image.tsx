@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -147,7 +147,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
           >
           {!dragActive && (
             <div className="flex flex-col gap-2 text-center">
-              <div className="flex justify-center text-gray-300">
+              <div className="flex justify-center text-foreground">
                 <LucideImage className="h-12 w-12 lg:h-16 lg:w-16" />
               </div>
               <div className="space-y-0">

@@ -6,18 +6,13 @@ import Link from "next/link"
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { Bell, Settings, Menu, User, Scan } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+import { 
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, 
+  DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, 
+  DropdownMenuSubContent, DropdownMenuSubTrigger 
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 interface AdminHeaderProps {
   toggleSidebar: () => void
@@ -41,12 +36,12 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
   }, [pathname]);
 //sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
   return (
-    <header className="fixed md:relative top-0 right-0 z-30 w-full backdrop-filter backdrop-blur supports-[backdrop-filter]:bg-background/50 md:supports-[backdrop-filter]:bg-background/0">
-        <div className="h-14 md:h-16 px-4 flex justify-between items-center">
+    <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-muted/60">
+        <div className="h-14 flex justify-between items-center px-4 md:px-6 border-b">
           <div className="flex items-center">
             <button
               onClick={toggleSidebar}
-              className="mr-4 text-foreground hidden md:block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary text-white"
+              className="mr-4 text-foreground block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label="Toggle sidebar"
             >
               <Menu className="h-6 w-6" />
@@ -57,7 +52,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
           <div className="flex items-center space-x-4">
             <Link
               href="/admin/scan"
-              className="text-foreground hover:text-primary transition-colors hidden md:block"
+              className="text-foreground hover:text-primary transition-colors"
               aria-label="Upload"
             >
               <Scan className="h-5 w-5" />

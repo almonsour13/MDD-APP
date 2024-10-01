@@ -1,19 +1,89 @@
 "use client"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,CardTitle,
-} from "@/components/ui/card"
+import { useState } from "react"
+import { format } from "date-fns"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Bell, Trees, ScanQrCode, Settings, Leaf, Menu, X, Radar, HeartPulse ,MoreHorizontal} from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
 import SampleTable from "@/components/common/table"
 import PageWrapper from "@/components/pageWrapper"
+import { cn } from "@/lib/utils"
+import { Bell, Trees, ScanQrCode, Settings, Leaf, Menu, X, Radar, HeartPulse, MoreHorizontal, Download, Filter, Calendar as CalendarIcon } from 'lucide-react'
+
+
 export default function Dashboard(){
+  const [timeRange, setTimeRange] = useState('This Week')
+  const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  const [date, setDate] = useState<Date>()
     return(
         <PageWrapper>
             {/* Metric */}
+          <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-background rounded-lg">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold tracking-tight">
+                Welcome back, User
+              </CardTitle>
+              <CardDescription className="text-muted-foreground mt-2">
+                Here is your farm health overview as of {currentDate}
+              </CardDescription>
+            </CardHeader>
+            <CardFooter className="gap-4">
+              <Button className="bg-primary hover:bg-primary/90">Scan New Trees</Button>
+              <Button variant="outline">View Detailed Reports</Button>
+            </CardFooter>
+          </Card>
+          <div className="flex flex-col md:flex-row items-end justify-end">
+            {/* <div className="space-y-1 hidden md:block">
+              <h2 className="text-2xl font-semibold tracking-tight">Dashboard</h2>
+              <p className="text-sm text-muted-foreground">
+                An overview of your farm's health and recent activities.
+              </p>
+            </div> */}
+            <div className="flex items-center space-x-2">
+              {/* <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-auto justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Select defaultValue={timeRange} onValueChange={setTimeRange}>
+                <SelectTrigger className="w-auto">
+                  <SelectValue placeholder="Select time range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="This Week">This Week</SelectItem>
+                  <SelectItem value="This Month">This Month</SelectItem>
+                  <SelectItem value="This Year">This Year</SelectItem>
+                </SelectContent>
+              </Select> */}
+              <Button variant="outline">
+                <Filter className="mr-2 h-4 w-4" />
+                Filter
+              </Button>
+              <Button variant="default" className="">
+                <Download className="mr-2 h-4 w-4" />
+                Export
+              </Button>
+            </div>
+          </div>
             <div className="grid gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
               {[
                 { title: 'Total Mango Trees', value: '320', icon: Trees },
@@ -26,7 +96,7 @@ export default function Dashboard(){
                   <CardTitle className="text-sm font-medium">
                     {item.title}
                   </CardTitle>
-                  <item.icon className="h-6 w-6 text-primary hidden md:block" />
+                  <item.icon className="h-4 w-4 text-primary hidden md:block" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{item.value}</div>

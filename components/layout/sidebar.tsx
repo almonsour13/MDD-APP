@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Image from 'next/image';
 import { LucideIcon, X } from 'lucide-react'
 import { sidebarItems } from '@/config/sidebar-item';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface AdminSidebarProps {
   role: string;
@@ -17,23 +18,23 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
   const pathname = usePathname();
   const items = sidebarItems(role);
   return (
-    <>
+    <div className='w-0 lg:w-64 relative'>
       {/* Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" 
           onClick={toggleSidebar}
           aria-hidden="true"
         />
       )}
-      
       {/* Sidebar */}
       <div 
-        className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 text-white transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-all duration-300 ease-in-out lg:relative lg:translate-x-0`}
-      >
-        <div className="h-16 flex items-center justify-between px-4">
+        className={`fixed bg-muted border-r inset-y-0 left-0 z-40 w-72 lg:w-64 transform ${
+          isOpen ? 'translate-x-0' : '-translate-x-full '
+        } transition-all duration-300 ease-in-out lg:translate-x-0`}
+        >
+        <ScrollArea className='h-screen'>
+        <div className="h-14 flex items-center justify-between px-4 border-b">
           <div className="flex gap-1 items-center justify-center">
             {/* <Image
               src="/assets/gif/loading.gif"
@@ -59,7 +60,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
             <X className="h-6 w-6" />
           </button>
         </div>
-        <nav className="px-4 mt-2 space-y-1">
+        <nav className="mt-2 px-4 space-y-1">
           {items.map((item) => (
             <Link
               key={item.label}
@@ -67,14 +68,16 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
               className={`w-full text-left text-foreground text-sm font-semibold px-4 py-2 rounded-lg hover:text-primary transition-colors ${
                 pathname === item.href ? 'bg-primary text-primary-foreground hover:text-primary-foreground' : ''
               } flex items-center gap-3`}
+              onClick={toggleSidebar} 
             >
-              <item.icon className="h-5 w-5" aria-hidden="true" />
+              <item.icon className="h-4 w-4" aria-hidden="true" />
               <span>{item.label}</span>
             </Link>
           ))}
         </nav>
+        </ScrollArea>
       </div>
-    </>
+    </div>
   )
 }
 

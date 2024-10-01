@@ -78,7 +78,7 @@ const About = () => {
             </p>
             <ul className="space-y-4 text-base sm:text-lg text-gray-600 dark:text-gray-300">
               <li className="flex items-center gap-3">
-                <Leaf className="w-6 h-6 text-green-500 flex-shrink-0" />
+                <Leaf className="w-6 h-6 primary flex-shrink-0" />
                 <span>Instant disease identification from leaf images</span>
               </li>
               <li className="flex items-center gap-3">
@@ -117,7 +117,7 @@ const HowToUse = () => {
   return (
     <section id="how-to-use" className="w-11/12 rounded-xl  py-12 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-primary-foreground dark:text-primary tracking-tighter sm:text-4xl md:text-6xl text-center mb-24">
+        <h2 className="text-3xl font-bold text-primary tracking-tighter sm:text-4xl md:text-6xl text-center mb-24">
           How to Use Our App
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

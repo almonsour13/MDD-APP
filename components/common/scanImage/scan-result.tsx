@@ -1,21 +1,17 @@
 "use client"
 
-import { AlertCircle, Info, X, Save, Trash2, Trees,ZoomIn } from "lucide-react"
+import React, { useEffect, useState } from "react"
+import { AlertCircle, Info, X, Save, Trash2, Trees, ZoomIn, ZoomOut, RotateCw, Download } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
 import { toast } from "@/hooks/use-toast"
 import { useScanResult } from "@/context/scan-result-context"
 import Image from "next/image"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Slider } from "@/components/ui/slider"
 
 export default function ResultDisplay() {
   const { scanResult, setScanResult } = useScanResult()
@@ -93,7 +89,7 @@ export default function ResultDisplay() {
       />
       <Card 
       //md:left-4 right-0 md:right-4
-        className={`absolute border-b bottom-0 m-0 left-0 right-0 z-50 rounded-lg rounded-b-none rounded-t border-0 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-in-out ${
+        className={`absolute bottom-0 left-0 right-0 z-50 rounded-lg rounded-b-none rounded-t border-0 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-in-out ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
         }`}
       >
@@ -103,7 +99,7 @@ export default function ResultDisplay() {
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
-        <CardContent className="flex flex-col md:flex-row gap-4 gap-y-4">
+        <CardContent className="flex flex-col md:flex-row gap-4">
           <div className="h-64 md:h-72 md:w-72 relative rounded-lg overflow-hidden shadow-md">
             <Image
               src={imageUrl || ""}
@@ -179,7 +175,7 @@ export default function ResultDisplay() {
             </Alert>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end space-x-2 bottom-0 z-10">
+        <CardFooter className="flex justify-end gap-2">
           <Button variant="destructive" onClick={handleClose}>
             <Trash2 className="mr-2 h-4 w-4" />
             Discard
@@ -208,7 +204,7 @@ export default function ResultDisplay() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog open={showImageDialog} onOpenChange={setShowImageDialog}>
+      {/* <Dialog open={showImageDialog} onOpenChange={setShowImageDialog}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Detailed View</DialogTitle>
@@ -222,7 +218,79 @@ export default function ResultDisplay() {
             />
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
+      <ShowImage imageUrl={imageUrl || ''} showImageDialog={showImageDialog} setShowImageDialog={setShowImageDialog}/>
     </>
+  )
+}
+interface ShowImageProps {
+  showImageDialog: boolean; 
+  setShowImageDialog: (value: boolean) => void;
+  imageUrl: string;
+}
+
+const ShowImage = ({ imageUrl = "/placeholder.svg?height=600&width=800", showImageDialog,setShowImageDialog }:ShowImageProps) =>{
+  const [zoom, setZoom] = useState(1)
+  const [rotation, setRotation] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleZoomChange = (value: number[]) => setZoom(value[0])
+  const handleRotate = () => setRotation(prev => (prev + 90) % 360)
+
+  const handleDownload = () => {
+    const link = document.createElement('a')
+    link.href = imageUrl
+    link.download = 'image.png'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  return (
+    <Dialog open={showImageDialog} onOpenChange={setShowImageDialog}>
+      <DialogContent className="w-full">
+        <DialogHeader className="flex flex-row items-center justify-between">
+          <DialogTitle className="text-2xl font-semibold">Detailed View</DialogTitle>
+        </DialogHeader>
+        <div className="relative h-96 bg-muted rounded-lg overflow-hidden">
+            <Image
+              src={imageUrl || ''}
+              alt="Detailed view of scanned mango leaf"
+              layout="fill"
+              objectFit="contain"
+              className="transition-all duration-300 ease-in-out w-auto h-auto max-h-96 rounded-md object-contain"
+              style={{
+                transform: `scale(${zoom}) rotate(${rotation}deg)`,
+              }}
+            />
+        </div>
+        <DialogFooter>
+            <Button variant="outline" size="icon" onClick={() => setZoom(prev => Math.max(prev - 0.1, 0.1))} disabled={zoom==1}>
+              <ZoomOut className="h-4 w-4" />
+              <span className="sr-only">Zoom out</span>
+            </Button>
+            <Slider
+              min={1}
+              max={5}
+              step={0.1}
+              value={[zoom]}
+              onValueChange={handleZoomChange}
+              className="w-64"
+            />
+            <Button variant="outline" size="icon" onClick={() => setZoom(prev => Math.min(prev + 0.1, 3))} disabled={zoom==3}>
+              <ZoomIn className="h-4 w-4" />
+              <span className="sr-only">Zoom in</span>
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleRotate}>
+              <RotateCw className="h-4 w-4" />
+              <span className="sr-only">Rotate image</span>
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleDownload}>
+              <Download className="h-4 w-4" />
+              <span className="sr-only">Download image</span>
+            </Button>
+          </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

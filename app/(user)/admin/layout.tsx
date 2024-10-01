@@ -17,7 +17,7 @@ export default function AdminLayout({
     const role = "admin";
     return (
       //bg-background md:bg-muted/80 dark:bg-background md:dark:bg-muted/20
-      <div className="flex h-auto lg:h-screen relative">
+      <div className="flex h-auto relative bg-muted">
         <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} role={role}/>
         <div className="w-full flex-1 flex flex-col overflow-hidden relative">
           <AdminHeader toggleSidebar={toggleSidebar}/>
@@ -29,7 +29,7 @@ export default function AdminLayout({
             {/* </div> */}
           </ScanResultProvider>
           </Suspense>
-          <AdminBottomNav role={role}/>
+          {/* <AdminBottomNav role={role}/> */}
           <Toaster />
         </div>
       </div>
