@@ -36,8 +36,8 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
   }, [pathname]);
 //sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
   return (
-    <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-muted/60">
-        <div className="h-14 flex justify-between items-center px-4 md:px-6 border-b">
+    <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-muted/50">
+        <div className="h-14 flex justify-between items-center px-4 md:px-6">
           <div className="flex items-center">
             <button
               onClick={toggleSidebar}

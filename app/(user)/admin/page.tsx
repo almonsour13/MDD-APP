@@ -10,7 +10,7 @@ import { Calendar } from "@/components/ui/calendar"
 import SampleTable from "@/components/common/table"
 import PageWrapper from "@/components/pageWrapper"
 import { cn } from "@/lib/utils"
-import { Bell, Trees, ScanQrCode, Settings, Leaf, Menu, X, Radar, HeartPulse, MoreHorizontal, Download, Filter, Calendar as CalendarIcon } from 'lucide-react'
+import { ListFilter, Trees, ScanQrCode, Settings, Leaf, Menu, X, Radar, HeartPulse, MoreHorizontal, Download, Filter, Calendar as CalendarIcon } from 'lucide-react'
 
 
 export default function Dashboard(){
@@ -20,7 +20,7 @@ export default function Dashboard(){
     return(
         <PageWrapper>
             {/* Metric */}
-          <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-background rounded-lg">
+          <Card className="bg-gradient-to-r from-primary/20 via-primary/5 to-background rounded-lg border-0">
             <CardHeader>
               <CardTitle className="text-3xl font-bold tracking-tight">
                 Welcome back, User
@@ -30,8 +30,7 @@ export default function Dashboard(){
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-4">
-              <Button className="bg-primary hover:bg-primary/90">Scan New Trees</Button>
-              <Button variant="outline">View Detailed Reports</Button>
+              <Link href="/admin/scan" className="inline-flex items-center justify-center rounded-md bg-primary hover:bg-primary/90 h-8 px-4 py-2">Scan New Trees</Link>
             </CardFooter>
           </Card>
           <div className="flex flex-col md:flex-row items-end justify-end">
@@ -74,13 +73,17 @@ export default function Dashboard(){
                   <SelectItem value="This Year">This Year</SelectItem>
                 </SelectContent>
               </Select> */}
-              <Button variant="outline">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
+              <Button variant="outline" className="gap-2">
+                <ListFilter className="h-3.5 w-3.5" />
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Filter
+                </span>
               </Button>
-              <Button variant="default" className="">
-                <Download className="mr-2 h-4 w-4" />
-                Export
+              <Button variant="default" className="gap-2">
+                <Download className="h-3.5 w-3.5" />
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  Export
+                </span>
               </Button>
             </div>
           </div>
@@ -216,6 +219,7 @@ const DiseaseTrendLineChart = () =>{
 
 import * as React from "react"
 import { Label, Pie, PieChart } from "recharts"
+import Link from "next/link"
 
 
 const PieChartData = [

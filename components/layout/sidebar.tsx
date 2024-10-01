@@ -29,12 +29,12 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
       )}
       {/* Sidebar */}
       <div 
-        className={`fixed bg-muted border-r inset-y-0 left-0 z-40 w-72 lg:w-64 transform ${
+        className={`fixed bg-background inset-y-0 left-0 z-40 w-72 lg:w-64 transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full '
         } transition-all duration-300 ease-in-out lg:translate-x-0`}
         >
-        <ScrollArea className='h-screen'>
-        <div className="h-14 flex items-center justify-between px-4 border-b">
+        <ScrollArea className='h-screen bg-muted/50'>
+        <div className="h-14 flex items-center justify-between px-4">
           <div className="flex gap-1 items-center justify-center">
             {/* <Image
               src="/assets/gif/loading.gif"
@@ -65,7 +65,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
             <Link
               key={item.label}
               href={`${item.href}`}
-              className={`w-full text-left text-foreground text-sm font-semibold px-4 py-2 rounded-lg hover:text-primary transition-colors ${
+              className={`w-full text-left text-foreground text-sm font-semibold px-4 py-2 rounded-md hover:text-primary transition-colors ${
                 pathname === item.href ? 'bg-primary text-primary-foreground hover:text-primary-foreground' : ''
               } flex items-center gap-3`}
               onClick={toggleSidebar} 
