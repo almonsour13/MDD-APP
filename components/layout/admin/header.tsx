@@ -36,12 +36,12 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
   }, [pathname]);
 //sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
   return (
-    <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-muted/50">
+    <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-background/50">
         <div className="h-14 flex justify-between items-center px-4 md:px-6">
           <div className="flex items-center">
             <button
               onClick={toggleSidebar}
-              className="mr-4 text-foreground block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary"
+              className="mr-4 h-auto text-foreground block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label="Toggle sidebar"
             >
               <Menu className="h-6 w-6" />

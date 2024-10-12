@@ -98,14 +98,14 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
                 {isScanning && (
                   <>
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
-                  <div className="absolute flex items-center justify-center bg-primary/40 w-full h-full">
+                  {/* <div className="absolute flex items-center justify-center bg-primary/40 w-full h-full">
                     <Image
                     src="/assets/gif/loading.gif"
                     alt="icon"
                     width={200}
                     height={200}
                   />
-                  </div>
+                  </div> */}
                   </>
                 )}
                 
@@ -138,7 +138,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
       ) : (
         <div
           className={`flex-1 flex flex-col items-center justify-center relative h-full w-full rounded-lg ${
-            dragActive ? 'bg-secondary' : ''
+            dragActive ? 'bg-muted' : ''
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -280,7 +280,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
         )}
       </div>
       <Button 
-        className={`w-full ${!uploadedImage || !treeCode || isScanning?" bg-primary/50":" bg-primary"}`}
+        className={`w-full ${!uploadedImage || !treeCode || isScanning?" bg-primary/50":" bg-primary"} h-9`}
         onClick={handleScan}
         disabled={!uploadedImage || !treeCode || isScanning}
       >

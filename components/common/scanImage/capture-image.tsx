@@ -93,79 +93,79 @@ const CameraField = () => {
   }, [])
   return (
     <>
-      <Card className="p-0 md:p-4 border-0 md:border flex flex-col gap-4 shadow-none">
-      <CardContent className={`h-80 lg:h-80 p-0 lg:p-4 flex rounded-xl border-none border-0`}>
-        <div className="flex-1 flex justify-center items-center h-full relative">
-          <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black text-primary-foreground">
-            {uploadedImage ? (
-              <div className="relative w-full h-full">
-                {isCropping?(
-                  <>
-                    <ImageCropper
-                      image={uploadedImage!}
-                      onCropComplete={handleCropComplete}
-                      onCropCancel={() => setIsCropping(false)}
-                    />
-                  </>
-                ):(
-                  <>
-                    <Image src={uploadedImage} alt="Uploaded" className="h-80 w-full md:w-80 rounded-md object-cover" width={256} height={256} />
-                    {isScanning && (
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+      <Card className="p-0 md:p-4 bg-none border-0 md:border flex flex-col gap-4 shadow-none">
+        <CardContent className={`h-80 lg:h-80 p-0 lg:p-4 flex rounded-xl border-none border-0`}>
+          <div className="flex-1 flex justify-center items-center h-full relative">
+            <div className="h-80 w-full md:w-80 overflow-hidden rounded-lg flex items-center justify-center relative bg-black text-primary-foreground">
+              {uploadedImage ? (
+                <div className="relative w-full h-full">
+                  {isCropping?(
+                    <>
+                      <ImageCropper
+                        image={uploadedImage!}
+                        onCropComplete={handleCropComplete}
+                        onCropCancel={() => setIsCropping(false)}
+                      />
+                    </>
+                  ):(
+                    <>
+                      <Image src={uploadedImage} alt="Uploaded" className="h-80 w-full md:w-80 rounded-md object-cover" width={256} height={256} />
+                      {isScanning && (
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
+                      )}
+                    </>
+                  )}
+                  <div className="absolute top-2 right-2 flex space-x-2">
+                    {!isScanning && !isCropping && (
+                      <Button
+                        onClick={() => setIsCropping(true)}
+                        size="icon"
+                        variant="secondary"
+                        className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
+                      >
+                        <Crop className="h-4 w-4" />
+                        <span className="sr-only">Crop image</span>
+                      </Button>
                     )}
-                  </>
-                )}
-                <div className="absolute top-2 right-2 flex space-x-2">
-                  {!isScanning && !isCropping && (
                     <Button
-                      onClick={() => setIsCropping(true)}
+                      onClick={handleRemoveImage}
                       size="icon"
                       variant="secondary"
                       className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
                     >
-                      <Crop className="h-4 w-4" />
-                      <span className="sr-only">Crop image</span>
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Remove image</span>
                     </Button>
+                  </div>  
+                </div>
+              ) : (
+                <>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="h-80 w-full md:w-80 object-cover"
+                  />
+                  {loading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-opacity-50">
+                      <span className="">Loading...</span>
+                    </div>
                   )}
-                  <Button
-                    onClick={handleRemoveImage}
-                    size="icon"
-                    variant="secondary"
-                    className="rounded-full opacity-75 hover:opacity-100 transition-opacity"
-                  >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Remove image</span>
-                  </Button>
-                </div>  
-              </div>
-            ) : (
-              <>
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="h-80 w-full md:w-80 object-cover"
-                />
-                {loading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-opacity-50">
-                    <span className="">Loading...</span>
-                  </div>
-                )}
-                {!cameraActive && !loading && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="">Camera not available</span>
-                  </div>
-                )}
-              </>
-            )}
+                  {!cameraActive && !loading && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="">Camera not available</span>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </CardContent>
-      <CardFooter className='flex-1 p-0'>
-        <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} isScanning={isScanning} setIsScanning={setIsScanning} cameraActive={cameraActive}/>
-      </CardFooter>
-      <canvas ref={canvasRef} className="hidden" />
+        </CardContent>
+        <CardFooter className='flex-1 p-0'>
+          <FooterContent uploadedImage={uploadedImage} handleCapture={handleCapture} isScanning={isScanning} setIsScanning={setIsScanning} cameraActive={cameraActive}/>
+        </CardFooter>
+        <canvas ref={canvasRef} className="hidden" />
       </Card>
       {/* <ResultDisplay/> */}
     </>
@@ -272,7 +272,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isSc
       </div>
       {!uploadedImage?(     
           <Button 
-            className="w-full bg-primary text-white" 
+            className="w-full bg-primary text-white h-9" 
             onClick={handleCapture}
             disabled={!cameraActive}
           >
@@ -280,7 +280,7 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage,handleCapture, isSc
           </Button>
       ):(
         <Button 
-          className={`w-full text-white ${!uploadedImage || !treeCode || isScanning?"bg-primary/50":"bg-primary"}`}
+          className={`w-full text-white ${!uploadedImage || !treeCode || isScanning?"bg-primary/50":"bg-primary"} h-9`}
           onClick={handleScan}
           disabled={!uploadedImage || !treeCode || isScanning}
         >

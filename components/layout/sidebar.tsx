@@ -33,7 +33,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
           isOpen ? 'translate-x-0' : '-translate-x-full '
         } transition-all duration-300 ease-in-out lg:translate-x-0`}
         >
-        <ScrollArea className='h-screen bg-muted/50'>
+        <ScrollArea className='h-screen'>
         <div className="h-14 flex items-center justify-between px-4">
           <div className="flex gap-1 items-center justify-center">
             {/* <Image

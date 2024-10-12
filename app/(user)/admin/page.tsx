@@ -20,7 +20,7 @@ export default function Dashboard(){
     return(
         <PageWrapper>
             {/* Metric */}
-          <Card className="bg-gradient-to-r from-primary/20 via-primary/5 to-background rounded-lg border-0">
+          <Card className="bg-gradient-to-r from-primary/20 via-primary/5 to-background border-0">
             <CardHeader>
               <CardTitle className="text-3xl font-bold tracking-tight">
                 Welcome back, User
@@ -30,7 +30,7 @@ export default function Dashboard(){
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-4">
-              <Link href="/admin/scan" className="inline-flex items-center justify-center rounded-md bg-primary text-foreground hover:bg-primary/90 h-8 px-4 py-2">Scan New Trees</Link>
+              <Link href="/admin/scan" className="inline-flex items-center text-white justify-center rounded-md bg-primary text-foreground hover:bg-primary/90 h-8 px-4 py-2">Scan New Trees</Link>
             </CardFooter>
           </Card>
           <div className="flex flex-col md:flex-row items-end justify-end">
@@ -132,7 +132,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -450,21 +449,21 @@ const Line2Chart = () => {
 
   return (
     <Card className="flex-1">
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+      <CardHeader className="flex flex-col items-stretch space-y-0 border-0 p-0 sm:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-4 py-5 sm:py-6">
           <CardTitle>Line Chart - Interactive</CardTitle>
           <CardDescription>
             Showing total visitors for the last 3 months
           </CardDescription>
         </div>
-        <div className="flex">
+        <div className="flex px-4">
           {["desktop", "mobile"].map((key) => {
             const chart = key as keyof typeof chartConfig
             return (
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
+                className="flex flex-1 flex-col justify-center gap-1 border-0 px-6 py-4 text-left  data-[active=true]:bg-muted/50 sm:px-8 sm:py-6"
                 onClick={() => setActiveChart(chart)}
               >
                 <span className="text-xs text-muted-foreground">
@@ -478,10 +477,10 @@ const Line2Chart = () => {
           })}
         </div>
       </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+      <CardContent className="px-4">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[250px] w-full border-t"
         >
           <LineChart
             accessibilityLayer
