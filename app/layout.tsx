@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+//Wimport { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollArea } from "@/components/ui/scroll-area";
-const inter = Inter({ subsets: ["latin"] });
+import { AuthProvider } from "@/context/auth-context";
+//const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   icons:"/assets/icon/icon.png",
@@ -16,18 +17,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  //inter.className+
   return (
     <html lang="en">
-      <body className={inter.className+" font-san bg-background relative"}>
+      <body className={" font-san bg-background relative"}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <ScrollArea>
-              {children}
-            </ScrollArea>
+            <AuthProvider>
+              <ScrollArea>
+                {children}
+              </ScrollArea>
+            </AuthProvider>
           </ThemeProvider>
       </body>
     </html>

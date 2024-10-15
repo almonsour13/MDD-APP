@@ -194,27 +194,43 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
   const [isInputTreeCode, setInputTreeCode] = useState(false)
   const { scanResult, setScanResult } = useScanResult()
   
-  
-  const handleScan = () => {
-    setIsScanning(true)
-    setTimeout(() => {
-      setIsScanning(false)
-      setScanResult({
-        imageUrl: uploadedImage!,
-        treeCode:treeCode,
-        disease: "Anthracnose",
-        confidence: 85,
-        severity: "Moderate",
-        affectedArea: "30%",
-        recommendations: [
-          "Apply fungicide treatment",
-          "Improve air circulation around trees",
-          "Remove infected leaves and fruits"
-        ],
-        additionalInfo: "Anthracnose is caused by fungi of the genus Colletotrichum."
-      })
-    }, 5000)
-  }
+  const handleScan = async () => {
+    setIsScanning(true); 
+    const requestBody = {
+        imageUrl: uploadedImage,  
+        treeCode: treeCode,     
+    };
+
+    try {
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+            const { error } = await response.json();
+            throw new Error(error || 'Something went wrong.');
+        }
+
+        const {result} = await response.json();
+        setIsScanning(false)
+        setScanResult({
+          imageUrl: uploadedImage,
+          treeCode: treeCode,
+          disease: result.disease,
+          confidence: result.confidence,
+          severity: result.severity,
+          affectedArea: result.affectedArea,
+          recommendations: result.recommendations,
+          additionalInfo: result.additionalInfo,
+        });
+    } catch (error) {
+    } finally {
+        setIsScanning(false);  // Reset scanning state after operation completes
+    }
+  };
+
   const toggleCustomTreeType = () => {
     setInputTreeCode(!isInputTreeCode)
     if (!isInputTreeCode) {

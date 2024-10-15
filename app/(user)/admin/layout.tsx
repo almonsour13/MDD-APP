@@ -5,7 +5,7 @@ import AdminSidebar from "@/components/layout/sidebar";
 import AdminBottomNav from "@/components/layout/admin/adminBottomNav";
 import Loading from "./loading";
 import { ScanResultProvider } from "@/context/scan-result-context";
-import ResultDisplay from "@/components/common/scanImage/scan-result";
+import ResultDisplay from "@/components/common/scan/scan-result";
 import { Toaster } from "@/components/ui/toaster";
 export default function AdminLayout({
   children,

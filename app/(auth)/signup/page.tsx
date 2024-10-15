@@ -33,7 +33,8 @@ export default function SignupForm() {
   } = useForm<FormData>()
 
   const onSubmit = (data: FormData) => {
-    router.push("/admin")
+   // router.push("/admin")
+    console.log(data)
   }
 
   const password = watch('password')
