@@ -35,9 +35,13 @@ export async function POST(req: Request) {
       
           const response = NextResponse.json({ success: true, role: user.role });
           response.cookies.set('token', token, {
-            httpOnly: true,
-            path: '/',
+            httpOnly: true,                          
+            secure: process.env.NODE_ENV === 'production',  
+            sameSite: 'none',                         // Allow cross-origin requests
+            maxAge: 3600,                            
+            path: '/',                                
           });
+          
       
           return response;
     } catch (error) {
