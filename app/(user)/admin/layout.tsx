@@ -29,7 +29,7 @@ export default function AdminLayout({
             {/* </div> */}
           </ScanResultProvider>
           </Suspense>
-          {/* <AdminBottomNav role={role}/> */}
+          <AdminBottomNav role={role}/>
           <Toaster />
         </div>
       </div>

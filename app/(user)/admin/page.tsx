@@ -11,35 +11,32 @@ import SampleTable from "@/components/common/table"
 import PageWrapper from "@/components/pageWrapper"
 import { cn } from "@/lib/utils"
 import { ListFilter, Trees, ScanQrCode, Settings, Leaf, Menu, X, Radar, HeartPulse, MoreHorizontal, Download, Filter, Calendar as CalendarIcon } from 'lucide-react'
-
+import { useAuth } from '@/context/auth-context'
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard(){
   const [timeRange, setTimeRange] = useState('This Week')
-  const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  //const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  const currentDate = new Date().toLocaleDateString('en-US', {  month: 'long', year: 'numeric', })
   const [date, setDate] = useState<Date>()
+  const router = useRouter()
     return(
         <PageWrapper>
             {/* Metric */}
-          <Card className="bg-gradient-to-r from-primary/20 via-primary/5 to-background border-0">
+          <Card className="bg-primary border-0">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold tracking-tight">
+              <CardTitle className="text-3xl font-bold text-white">
                 Welcome back, User
               </CardTitle>
-              <CardDescription className="text-muted-foreground mt-2">
+              <CardDescription className="text-white mt-2">
                 Here is your farm health overview as of {currentDate}
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-4">
-              <Link href="/admin/scan" className="inline-flex items-center text-white justify-center rounded-md bg-primary text-foreground hover:bg-primary/90 h-8 px-4 py-2">Scan New Trees</Link>
+              <Link href="/admin/scan" className="inline-flex items-center justify-center rounded-md bg-white text-black h-8 px-4 py-2">Scan New Trees</Link>
             </CardFooter>
           </Card>
           <div className="flex flex-col md:flex-row items-end justify-end">
-            {/* <div className="space-y-1 hidden md:block">
-              <h2 className="text-2xl font-semibold tracking-tight">Dashboard</h2>
-              <p className="text-sm text-muted-foreground">
-                An overview of your farm's health and recent activities.
-              </p>
-            </div> */}
             <div className="flex items-center space-x-2">
               {/* <Popover>
                 <PopoverTrigger asChild>
@@ -94,20 +91,27 @@ export default function Dashboard(){
                 { title: 'Diseases Detected', value: '287', icon: Radar },
                 { title: 'Healthy Trees', value: '76%', icon: HeartPulse },
               ].map((item,index) => (
-                <Card key={index}>
-                <CardHeader className="flex h-16 flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {item.title}
-                  </CardTitle>
-                  <item.icon className="h-4 w-4 text-primary hidden md:block" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{item.value}</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
-                  </p>
-                </CardContent>
-              </Card>
+                <Card key={index} className="p-4 rounded-lg space-y-1">
+                  <h1 className="text-2xl font-medium flex items-center gap-2">
+                    <item.icon className="text-primary" />
+                    <span>{item.value}</span>
+                  </h1>
+                  <h1 className="text-sm text-muted-foreground">{item.title}</h1>
+                </Card>
+                // <Card key={index}>
+                // <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                //   <CardTitle className="text-sm font-medium">
+                //     {item.title}
+                //   </CardTitle>
+                //   <item.icon className="h-4 w-4 text-primary hidden md:block" />
+                // </CardHeader>
+                // <CardContent>
+                //   <div className="text-2xl font-bold">{item.value}</div>
+                //   <p className="text-xs hidden md:block text-muted-foreground">
+                //     +20.1% from last month
+                //   </p>
+                // </CardContent>
+                // </Card>
               ))}
             </div>
             {/* Charts */}

@@ -10,7 +10,8 @@ import {Card, CardContent, CardDescription, CardHeader,CardTitle,} from '@/compo
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, AlertCircle  } from 'lucide-react'
+import { useAuth } from '@/context/auth-context'
 
 type FormData = {
   email: string
@@ -19,7 +20,10 @@ type FormData = {
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
-    const router = useRouter();
+    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const { setToken } = useAuth()
     const {
         register,
         handleSubmit,
@@ -27,21 +31,27 @@ export default function LoginForm() {
     } = useForm<FormData>()
 
     const onSubmit = async (data: FormData) => {
-        const response = await fetch('/api/auth/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });      
-        if (response.ok) {
-            const { token } = await response.json();
-            router.push("/admin")
-        }else{
-            const { error } = await response.json();
-            console.log(error)
+        setLoading(true);
+        try {
+            const response = await fetch('/api/auth/signin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            })
+            
+            if (response.ok) {
+                const { role } = await response.json();
+                router.push(role === 1 ? '/admin' : '/user');
+            } else {
+                const { error } = await response.json()
+                setError(error || 'An unexpected error occurred. Please try again.')
+            }
+            setLoading(false);
+        } catch (err) {
+            setError('An unexpected error occurred. Please try again.')
+            setLoading(false);
         }
-    };
-    
-
+    }    
     return (
         <div className="w-full h-screen flex">
             <div className="flex-1 flex items-center justify-center">
@@ -57,19 +67,20 @@ export default function LoginForm() {
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email:</Label>
                         <Input
-                        id="email"
-                        type="email"
-                        placeholder="m@example.com"
-                        {...register("email", {
-                            required: "Email is required",
-                            pattern: {
-                            value: /\S+@\S+\.\S+/,
-                            message: "Invalid email address",
-                            },
-                        })}
+                            id="email"
+                            type="email"
+                            placeholder="m@example.com"
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                value: /\S+@\S+\.\S+/,
+                                message: "Invalid email address",
+                                },
+                            })}
+                            onChange={()=>setError('')}
                         />
                         {errors.email && (
-                        <p className="text-sm text-red-500">{errors.email.message}</p>
+                            <p className="text-sm text-red-500">{errors.email.message}</p>
                         )}
                     </div>
                     <div className="grid gap-2">
@@ -85,6 +96,7 @@ export default function LoginForm() {
                                 message: 'Password must be at least 8 characters',
                             },
                             })}
+                            onChange={()=>setError('')}
                         />
                         <button
                             type="button"
@@ -99,15 +111,18 @@ export default function LoginForm() {
                         </button>
                         </div>
                         {errors.password && (
-                        <p className="text-sm text-red-500">{errors.password.message}</p>
+                            <p className="text-sm text-red-500">{errors.password.message}</p>
+                        )}
+                        {error && (
+                            <p className="text-sm text-red-500">{error}</p>
                         )}
                     </div>
-                    <Button type="submit" className="w-full bg-primary">
-                        Login
+                    <Button type="submit" className="w-full bg-primary" disabled={loading}>
+                        {loading?"Loging in":"Login"}
                     </Button>
-                    <Button type="button" variant="outline" className="w-full">
+                    {/* <Button type="button" variant="outline" className="w-full">
                         Login with Google
-                    </Button>
+                    </Button> */}
                     <div className="mt-4 text-center text-sm">
                         Don&apos;t have an account?{" "}
                         <Link href="/signup" className="underline">

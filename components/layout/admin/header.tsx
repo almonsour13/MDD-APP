@@ -12,7 +12,7 @@ import {
   DropdownMenuSubContent, DropdownMenuSubTrigger 
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
+import { useRouter } from 'next/navigation';
 
 interface AdminHeaderProps {
   toggleSidebar: () => void
@@ -22,6 +22,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
   const [pageTitle, setPageTitle] = useState("");
   const pathname = usePathname()
   const { setTheme, theme } = useTheme()
+  const router = useRouter()
 
   useEffect(() => {
     const title = pathname
@@ -34,6 +35,15 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
     setPageTitle(title && title !== "Admin" ? title : 'Dashboard');
     document.title = `Admin | ${title && title !== "Admin" ? title : 'Dashboard'}`;
   }, [pathname]);
+  const handleLogout = async () => {
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    if (response.ok) {
+      router.push("/signin")
+    } 
+  }
 //sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60
   return (
     <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-background/50">
@@ -146,7 +156,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
                 </DropdownMenuSub>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-destructive">
-                  <Link href="/signin">Log out</Link>
+                  <button className='w-full' onClick={handleLogout}>Log out</button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

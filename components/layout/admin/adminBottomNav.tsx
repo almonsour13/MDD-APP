@@ -1,138 +1,150 @@
 'use client'
 
-import React, { useState,useEffect } from 'react'
-import { MoreHorizontal, Scan, X } from 'lucide-react'
+import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { sidebarItems } from '@/config/sidebar-item';
+import { MoreHorizontal, Scan, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { sidebarItems } from '@/config/sidebar-item'
 
 interface AdminBottomNavProps {
-  role: string;
+  role: string
 }
 
 export default function AdminBottomNav({ role }: AdminBottomNavProps) {
-  const pathname = usePathname();
-  const items = sidebarItems(role);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  useEffect(() => {
-    if (sidebarOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      document.body.style.overflow = ''; // Clean up when the component unmounts
-    };
-  }, [sidebarOpen]);
-  const toggleMoreMenu = () => setSidebarOpen(!sidebarOpen);
+  const pathname = usePathname()
+  const items = sidebarItems(role)
+  const moreItems = items.slice(4)
+  const isMoreActive = moreItems.some(item => item.href === pathname)
 
   return (
-    <>
-      <div className="fixed bottom-0 left-0 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/95 dark:supports-[backdrop-filter]:bg-background/90 md:hidden">
-        <div className="grid grid-cols-5 gap-4 h-14 md:h-16 px-4 py-2 items-center justify-center relative">
+    <nav className="fixed bottom-0 left-0 z-40 w-full backdrop-filter backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-sm rounded-t-xl md:hidden">
+      <div className="px-4">
+        <div className="flex h-16 items-center justify-between">
           {items.slice(0, 2).map((item) => (
-            <Link
-              key={item.label}
-              href={`${item.href}`}
-              className={`inline-flex h-10 rounded-lg flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
-                pathname === item.href ? 'bg-primary text-primary-foreground hover:text-white' : ''
-              }`}
-              prefetch={true}
-            >
-              <item.icon className="w-6 h-6" aria-hidden="true" />
-            </Link>
+            <NavItem key={item.label} item={item} pathname={pathname} />
           ))}
-          <Link
-            href={`/admin/scan`}
-            className={`inline-flex h-10 rounded flex-col text-foreground items-center justify-center hover:text-primary transition-colors ${
-              pathname === '/admin/scan' ? 'bg-primary text-primary-foreground hover:text-white' : ''
-            }`}
-            prefetch={true}
-          >
-            <Scan className="w-6 h-6" aria-hidden="true" />
-          </Link>
+          {/* <NavItem
+            item={{
+              href: '/admin/scan',
+              icon: Scan,
+              label: 'Scan',
+            }}
+            pathname={pathname}
+          /> */}
+            <Link href="/admin/scan" className='h-12 w-12 bg-primary rounded-lg flex items-center justify-center'>
+              <Scan className='h-8 w-8 text-white'/>
+            </Link>
           {items.slice(3, 4).map((item) => (
-            <Link
-              key={item.label}
-              href={`${item.href}`}
-              className={`inline-flex flex-col text-foreground h-10 rounded items-center justify-center hover:text-primary transition-colors ${
-                pathname === item.href ? 'bg-primary text-primary-foreground hover:text-white' : ''
-              }`}
-              prefetch={true}
-            >
-              <item.icon className="w-6 h-6" aria-hidden="true" />
-            </Link>
+            <NavItem key={item.label} item={item} pathname={pathname} />
           ))}
-          <button
-            className="inline-flex flex-col text-foreground h-10 rounded items-center justify-center hover:text-primary transition-colors"
-            onClick={toggleMoreMenu}
-          >
-            <MoreHorizontal className="w-6 h-6" aria-hidden="true" />
-          </button>
-          <MoreMenu
-            items={items.slice(4)}
-            isOpen={sidebarOpen}
-            toggleSidebar={toggleMoreMenu}
-          />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button 
+                variant={"default"} 
+                size="icon" 
+                className={`h-10 bg-transparent shadow-none w-10 relative ${isMoreActive ? 'text-primary' : 'text-muted-foreground'}`}
+              >
+                <MoreHorizontal className="h-5 w-5" />
+                <AnimatePresence>
+                  {isMoreActive && (
+                    <motion.span
+                      className="absolute -bottom-1 left-0 h-1 w-10 rounded-full bg-primary"
+                      layoutId="bottomNav"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    />
+                  )}
+                </AnimatePresence>
+                <span className="sr-only">More menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[50vh]">
+              <MoreMenu items={moreItems} pathname={pathname} />
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-
-      {/* Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-60 z-30 lg:hidden transition-opacity duration-300 ease-in-out"
-          onClick={toggleMoreMenu}
-          aria-hidden="true"
-        />
-      )}
-    </>
-  );
+    </nav>
+  )
 }
 
-interface SidebarItem {
-  href: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  label: string;
+interface NavItemProps {
+  item: {
+    href: string
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+    label: string
+  }
+  pathname: string
+}
+
+function NavItem({ item, pathname }: NavItemProps) {
+  const isActive = pathname === item.href
+
+  return (
+    <Link
+      href={item.href}
+      className={`relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${
+        isActive
+          ? 'text-primary font-bold'
+          : 'text-muted-foreground hover:text-primary'
+      }`}
+      prefetch={true}
+    >
+      <item.icon className="h-5 w-5" />
+      <AnimatePresence>
+        {isActive && (
+          <motion.span
+            className="absolute -bottom-1 left-0 h-1 w-10 rounded-full bg-primary"
+            layoutId="bottomNav"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+        )}
+      </AnimatePresence>
+      <span className="sr-only">{item.label}</span>
+    </Link>
+  )
 }
 
 interface MoreMenuProps {
-  items: SidebarItem[];
-  isOpen: boolean;
-  toggleSidebar: () => void;
+  items: {
+    href: string
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+    label: string
+  }[]
+  pathname: string
 }
 
-const MoreMenu: React.FC<MoreMenuProps> = ({ items, isOpen, toggleSidebar }) => {
-  const pathname = usePathname();
-
+function MoreMenu({ items, pathname }: MoreMenuProps) {
   return (
-    <nav
-      className={`fixed bottom-0 z-50 p-6 h-auto w-full bg-primary-foreground dark:bg-background mt-6 space-y-4 rounded-t-lg transform ${
-        isOpen ? 'translate-y-0' : 'translate-y-full'
-      } transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0`}
-    >
-      <div className="w-full flex justify-end">
-        <button
-          onClick={toggleSidebar}
-          className="lg:hidden focus:outline-none focus:ring-2 focus:ring-white text-foreground"
-          aria-label="Close sidebar"
-        >
-          <X className="h-6 w-6" />
-        </button>
+    <ScrollArea className="h-full">
+      <div className="space-y-4 py-4">
+        <h2 className="px-2 text-lg font-semibold tracking-tight">More Options</h2>
+        <div className="space-y-1">
+          {items.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname === item.href
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+              }`}
+              prefetch={true}
+            >
+              <item.icon className="h-4 w-4" />
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </div>
       </div>
-      {items.map((item) => (
-        <Link
-          key={item.label}
-          href={`${item.href}`}
-          className={`w-full text-left text-foreground px-4 py-2 rounded-lg hover:text-primary transition-colors ${
-            pathname === item.href ? 'bg-primary text-primary-foreground' : ''
-          } flex items-center gap-3`}
-          prefetch={true}
-        >
-          <item.icon className="h-5 w-5" aria-hidden="true" />
-          <span>{item.label}</span>
-        </Link>
-      ))}
-    </nav>
-  );
-};
+    </ScrollArea>
+  )
+}

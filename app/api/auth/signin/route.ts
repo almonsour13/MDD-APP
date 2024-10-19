@@ -6,7 +6,11 @@ import { hash } from 'bcrypt';
 export async function POST(req: Request) {
     try {
         const hashedPassword = await hash("monsour13", 10);
-        const users = [{ id: 1, email: "almonsoursalida@gmail.com", password: hashedPassword, role: 1 }];
+        const hashedPassword2 = await hash("monsour14", 10);
+        const users = [
+            { id: 1, email: "almonsoursalida@gmail.com", password: hashedPassword, role: 1 },
+            { id: 2, email: "almonsoursalidaa@gmail.com", password: hashedPassword2, role: 2 }
+        ];
 
         const { email, password } = await req.json();
 
@@ -23,9 +27,22 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
         }
         
-        const token = sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET_KEY!, {expiresIn: '1h' });
-
-        return NextResponse.json({ token: token });
+        const token = sign(
+            { userId: user.id, role: user.role },
+            process.env.JWT_SECRET_KEY!,
+            { expiresIn: '1h' }
+          );
+      
+          const response = NextResponse.json({ success: true, role: user.role });
+          response.cookies.set('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 3600, // 1 hour
+            path: '/',
+          });
+      
+          return response;
     } catch (error) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Something went wrong.' }, { status: 500 });
