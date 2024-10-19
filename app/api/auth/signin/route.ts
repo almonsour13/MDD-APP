@@ -3,6 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 import { hash } from 'bcrypt';
 
+const IS_PRODUCTION = process.env.APP_ENV === 'production'
 export async function POST(req: Request) {
     try {
         const hashedPassword = await hash("monsour13", 10);
@@ -34,13 +35,17 @@ export async function POST(req: Request) {
           );
       
           const response = NextResponse.json({ success: true, role: user.role });
+          const oneDay = 24 * 60 * 60 * 1000 // 1 day in milliseconds
+  
           response.cookies.set('token', token, {
-            httpOnly: true,                          
-            secure: process.env.NODE_ENV === 'production',  
-            sameSite: 'none',                         // Allow cross-origin requests
-            maxAge: 3600,                            
-            path: '/',                                
-          });
+                httpOnly: true,
+                secure: IS_PRODUCTION,
+                sameSite: IS_PRODUCTION ? 'none' : 'lax',
+                maxAge: oneDay,
+                path: '/',
+                // Uncomment and set your domain if needed
+                // domain: process.env.COOKIE_DOMAIN || undefined,
+            })
           
       
           return response;
