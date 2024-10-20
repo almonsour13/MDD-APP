@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function ImageScannerScreen() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null)
@@ -15,12 +16,13 @@ export default function ImageScannerScreen() {
   const [flashMode, setFlashMode] = useState(false)
   const [capturedImage, setCapturedImage] = useState('')
   const [scanResult, setScanResult] = useState(null)
+  const streamRef = useRef<MediaStream | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     (async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
         if (videoRef.current) {
           videoRef.current.srcObject = stream
           setHasPermission(true)
@@ -61,10 +63,31 @@ export default function ImageScannerScreen() {
     }
   }
 
-  const toggleFlash = () => {
-    setFlashMode(!flashMode)
-    // Note: Web API doesn't support flash control. This is just for UI demonstration.
+  const toggleFlash = async () => {
+    if (streamRef.current) {
+      const track = streamRef.current.getVideoTracks()[0]
+  
+      // Cast capabilities to 'any' to bypass TypeScript error
+      const capabilities = track.getCapabilities() as any
+  
+      // Check if the device supports torch (flash)
+      if (capabilities.torch) {
+        try {
+          // Cast applyConstraints to 'any' to bypass TypeScript error
+          await (track.applyConstraints as any)({
+            advanced: [{ torch: !flashMode }]
+          })
+          setFlashMode(!flashMode)
+        } catch (err) {
+          console.error('Error toggling flash:', err)
+        }
+      } else {
+        console.warn('Torch is not supported on this device')
+      }
+    }
   }
+  
+
 
 //   if (hasPermission === null) {
 //     return null
@@ -108,6 +131,9 @@ export default function ImageScannerScreen() {
                   <div className="absolute bottom-4 right-4 w-20 h-20 border-8 rounded-br-md border-green-600 border-l-0 border-t-0" />
                 </div>
               </>
+            )}
+            {capturedImage && (
+              <Image src={capturedImage} alt="Captured" className="w-full h-full object-cover" />
             )}
             <canvas ref={canvasRef} className="hidden" width={1280} height={720} />
           </div>
