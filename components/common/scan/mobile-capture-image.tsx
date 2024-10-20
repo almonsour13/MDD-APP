@@ -22,7 +22,7 @@ export default function ImageScannerScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
         if (videoRef.current) {
           videoRef.current.srcObject = stream
           setHasPermission(true)
@@ -39,16 +39,37 @@ export default function ImageScannerScreen() {
     }
   }, [scanResult])
 
-  const handleCapture = () => {
-    if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext('2d')
-      if (context) {
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height)
-        const imageDataUrl = canvasRef.current.toDataURL('image/jpeg')
-        setCapturedImage(imageDataUrl)
-      }
+  // const handleCapture = () => {
+  //   if (videoRef.current && canvasRef.current) {
+  //     const context = canvasRef.current.getContext('2d')
+  //     if (context) {
+  //       context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height)
+  //       const imageDataUrl = canvasRef.current.toDataURL('image/jpeg')
+  //       setCapturedImage(imageDataUrl)
+  //     }
+  //   }
+  // }
+  const handleCapture = async () => {
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+  
+    if (canvas && video) {
+      const context = canvas.getContext("2d");
+  
+      const size = Math.min(video.videoWidth, video.videoHeight);
+  
+      canvas.width = size;
+      canvas.height = size;
+  
+      const xOffset = (video.videoWidth - size) / 2;
+      const yOffset = (video.videoHeight - size) / 2;
+  
+      context?.drawImage(video, xOffset, yOffset, size, size, 0, 0, size, size);
+      
+      const imageData = canvas.toDataURL("image/png");
+      setCapturedImage(imageData);
     }
-  }
+  };
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -133,9 +154,9 @@ export default function ImageScannerScreen() {
               </>
             )}
             {capturedImage && (
-              <Image src={capturedImage} alt="Captured" className="w-full h-full object-cover" />
+              <Image src={capturedImage} alt="Uploaded" className="h-80 w-full md:w-80 rounded-md object-cover" width={256} height={256} />        
             )}
-            <canvas ref={canvasRef} className="hidden" width={1280} height={720} />
+          <canvas ref={canvasRef} className="hidden" width={1280} height={720} />
           </div>
         </main>
 
