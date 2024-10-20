@@ -65,12 +65,14 @@ const AdminSidebar = ({ isOpen, toggleSidebar, role }: AdminSidebarProps) => {
             <Link
               key={item.label}
               href={`${item.href}`}
-              className={`w-full text-left text-foreground text-sm font-semibold px-4 py-2 rounded-md hover:text-primary transition-colors ${
-                pathname === item.href ? 'bg-primary text-primary-foreground hover:text-primary-foreground' : ''
+              className={`w-full text-left text-foreground text-sm font-semibold px-2 py-2 rounded-xl hover:text-secondary transition-colors ${
+                pathname === item.href ? 'bg-primary text-primary-foreground' : ''
               } flex items-center gap-3`}
               onClick={toggleSidebar} 
             >
+              <div className="p-2 bg-muted-foreground/20 rounded-lg">
               <item.icon className="h-4 w-4" aria-hidden="true" />
+              </div>
               <span>{item.label}</span>
             </Link>
           ))}

@@ -51,7 +51,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
           <div className="flex items-center">
             <button
               onClick={toggleSidebar}
-              className="mr-4 h-auto text-foreground block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary"
+              className="mr-4 h-auto text-foreground hidden md:block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label="Toggle sidebar"
             >
               <Menu className="h-6 w-6" />
@@ -62,7 +62,7 @@ export default function AdminHeader({ toggleSidebar }: AdminHeaderProps) {
           <div className="flex items-center space-x-4">
             <Link
               href="/admin/scan"
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-primary transition-colors hidden md:block"
               aria-label="Upload"
             >
               <Scan className="h-5 w-5" />

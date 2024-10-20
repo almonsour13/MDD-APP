@@ -1,38 +1,48 @@
-"use client"
-import { Suspense, useState } from "react";
-import AdminHeader from "@/components/layout/admin/header";
-import AdminSidebar from "@/components/layout/sidebar";
-import AdminBottomNav from "@/components/layout/admin/adminBottomNav";
-import Loading from "./loading";
-import { ScanResultProvider } from "@/context/scan-result-context";
-import ResultDisplay from "@/components/common/scan/scan-result";
-import { Toaster } from "@/components/ui/toaster";
+'use client'
+
+import { Suspense, useState, useEffect } from "react"
+import { usePathname } from 'next/navigation'
+import AdminHeader from "@/components/layout/admin/header"
+import AdminSidebar from "@/components/layout/sidebar"
+import AdminBottomNav from "@/components/layout/admin/adminBottomNav"
+import Loading from "./loading"
+import { ScanResultProvider } from "@/context/scan-result-context"
+import ResultDisplay from "@/components/common/scan/scan-result"
+import { Toaster } from "@/components/ui/toaster"
+import ImageScannerScreen from "@/components/common/scan/mobile-capture-image"
+
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-    const role = "admin";
-    return (
-      //bg-background md:bg-muted/80 dark:bg-background md:dark:bg-muted/20
-      <div className="flex h-auto relative bg-background">
-        <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} role={role}/>
-        <div className="w-full flex-1 flex flex-col overflow-hidden relative">
-          <AdminHeader toggleSidebar={toggleSidebar}/>
-          <Suspense fallback={<Loading/>}>
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const role = "admin"
+  const pathname = usePathname()
+
+  const isCapturePage = pathname === '/admin/scan' // Adjust this path as needed
+
+  if (isCapturePage) {
+    return <ImageScannerScreen />
+  }
+  //md:bg-muted/80 dark:bg-background md:dark:bg-muted/20
+  return (
+    <div className="flex h-auto min-h-screen relative bg-background">
+      <AdminSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} role={role}/>
+      <div className="w-full flex-1 flex flex-col overflow-hidden">
+        <AdminHeader toggleSidebar={toggleSidebar}/>
+        <Suspense fallback={<Loading/>}>
           <ScanResultProvider>
-            {/* <div className="flex-1 relative"> */}
+            <main className="flex-1 overflow-y-auto">
               {children}
               <ResultDisplay/>
-            {/* </div> */}
+            </main>
           </ScanResultProvider>
-          </Suspense>
-          <AdminBottomNav role={role}/>
-          <Toaster />
-        </div>
+        </Suspense>
+        <AdminBottomNav role={role}/>
+        <Toaster />
       </div>
-    );
-  }
-  
+    </div>
+  )
+}

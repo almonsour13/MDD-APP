@@ -98,14 +98,6 @@ const UploadImage: React.FC<UploadImageProps> = ({ uploadedImage, setUploadedIma
                 {isScanning && (
                   <>
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/80 to-transparent animate-scan" />
-                  {/* <div className="absolute flex items-center justify-center bg-primary/40 w-full h-full">
-                    <Image
-                    src="/assets/gif/loading.gif"
-                    alt="icon"
-                    width={200}
-                    height={200}
-                  />
-                  </div> */}
                   </>
                 )}
                 

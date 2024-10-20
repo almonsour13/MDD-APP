@@ -47,7 +47,7 @@ export default function AdminBottomNav({ role }: AdminBottomNavProps) {
               <Button 
                 variant={"default"} 
                 size="icon" 
-                className={`h-10 bg-transparent shadow-none w-10 relative ${isMoreActive ? 'text-primary' : 'text-muted-foreground'}`}
+                className={`h-10 bg-transparent shadow-none hover:bg-transparent w-10 relative ${isMoreActive ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
               >
                 <MoreHorizontal className="h-5 w-5" />
                 <AnimatePresence>

@@ -84,7 +84,7 @@ export default function Dashboard(){
               </Button>
             </div>
           </div>
-            <div className="grid gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
               {[
                 { title: 'Total Mango Trees', value: '320', icon: Trees },
                 { title: 'Images Analyzed', value: '1,543', icon: ScanQrCode },
@@ -115,7 +115,7 @@ export default function Dashboard(){
               ))}
             </div>
             {/* Charts */}
-            <div className="w-full flex flex-col lg:flex-row gap-4">
+            <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4">
                 {/* <DiseaseTrendLineChart/> */}
                 <Line2Chart/>
                 <AnalysisStatus/>

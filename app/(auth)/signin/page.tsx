@@ -42,6 +42,7 @@ export default function LoginForm() {
             if (response.ok) {
                 const { role } = await response.json();
                 router.push(role === 1 ? '/admin' : '/user');
+                
             } else {
                 const { error } = await response.json()
                 setError(error || 'An unexpected error occurred. Please try again.')
@@ -55,7 +56,7 @@ export default function LoginForm() {
     return (
         <div className="w-full h-screen flex">
             <div className="flex-1 flex items-center justify-center">
-                <Card className="mx-auto lg:w-7/12 border-0">
+                <Card className="mx-auto w-full lg:w-7/12 border-0">
                 <CardHeader>
                     <CardTitle className="text-2xl text-primary">Login</CardTitle>
                     <CardDescription>
