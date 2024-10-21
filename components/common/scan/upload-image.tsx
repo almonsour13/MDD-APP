@@ -241,12 +241,12 @@ const FooterContent:React.FC<FooterProps> = ({ uploadedImage, isScanning, setIsS
     
     <div className="flex flex-col gap-2 w-full">
       {!uploadedImage &&
-      <Button className="w-full bg-transparent hover:bg-transparent border text-foreground"
-      onClick={toggleCamera}
-      >
-      <Camera className="w-4 h-4 mr-2" />
-      Use Camera
-    </Button>
+      <Button variant="default" className="w-full bg-transparent hover:bg-transparent border text-foreground shadow-none"
+        onClick={toggleCamera}
+        >
+        <Camera className="w-4 h-4 mr-2" />
+        Use Camera
+      </Button>
       }   
       <div className="flex-1 flex items-center w-full gap-2">
         {isInputTreeCode ? (

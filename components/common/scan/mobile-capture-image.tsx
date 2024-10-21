@@ -87,10 +87,10 @@ export default function ImageScannerScreen() {
     }
   }
   const handleSwitchCamera = () => {
-    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user')
-    stopCamera().then(() => {
-      startCamera();
-    });
+    setFacingMode(facingMode === 'user' ? 'environment' : 'user')
+    // stopCamera().then(() => {
+    //   startCamera();
+    // });
   };
   const handleCheck = () =>{
       stopCamera()
