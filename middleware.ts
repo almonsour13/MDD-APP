@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
         }
     } catch (error) {
         console.error('Token verification failed:', error);
-        return NextResponse.redirect(new URL('/signin', request.url));
+        //return NextResponse.redirect(new URL('/signin', request.url));
     }
 
     return NextResponse.next();
