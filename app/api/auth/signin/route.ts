@@ -35,23 +35,28 @@ export async function POST(req: Request) {
       
           const response = NextResponse.json({ success: true, role: user.role });
         
-        // Get the origin of the request
-        const origin = req.headers.get('origin');
         
-        // Set the cookie with more flexible options
-        response.cookies.set('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
-            maxAge: 3600,
-            path: '/',
-        });
+            response.cookies.set('token', token, {
+                httpOnly: true,
+                secure: true,                // Must be true when SameSite is 'none'.
+                sameSite: 'none',            // Allows the cookie to be sent in cross-origin requests.
+                maxAge: 30 * 24 * 60 * 60,   // Cookie lifespan.
+                path: '/',                   // Cookie is available across the whole site.
+            });
         
-        // Set CORS headers
-        response.headers.set('Access-Control-Allow-Origin', origin || '*');
-        response.headers.set('Access-Control-Allow-Credentials', 'true');
-        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+            const allowedOrigins = ['https://mangocare.netlify.app', 'https://mdd-app.vercel.app'];
+            const origin: string = req.headers.get('origin') || 'https://mangocare.netlify.app';  // Provide fallback
+
+            if (allowedOrigins.includes(origin)) {
+            response.headers.set('Access-Control-Allow-Origin', origin);
+            }
+
+            response.headers.set('Access-Control-Allow-Credentials', 'true');
+            response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+      
+          console.log('Cookie set:', response.cookies.get('token'));
 
         return response;
     } catch (error) {
