@@ -41,13 +41,12 @@ export async function POST(req: Request) {
         // Set the cookie with more flexible options
         response.cookies.set('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Only use secure in production
+            secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 3600,
             path: '/',
-            domain: process.env.COOKIE_DOMAIN, // Set this in your environment variables
         });
-
+        
         // Set CORS headers
         response.headers.set('Access-Control-Allow-Origin', origin || '*');
         response.headers.set('Access-Control-Allow-Credentials', 'true');
