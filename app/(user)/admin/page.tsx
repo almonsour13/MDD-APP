@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { format } from "date-fns";
 import {
   Card,
@@ -48,14 +48,13 @@ const Dashboard = () => {
     month: "long",
     year: "numeric",
   });
-
   return (
     <PageWrapper>
       {/* Welcome Card */}
       <Card className="bg-primary border-0">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-white">
-            Welcome back, User
+            Welcome back, user
           </CardTitle>
           <CardDescription className="text-white mt-2">
             Here is your farm health overview as of {currentDate}

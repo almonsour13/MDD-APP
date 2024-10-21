@@ -10,7 +10,6 @@ export async function middleware(request: NextRequest) {
     }
 
     if (token) {
-        try {
             const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
             const { payload } = await jwtVerify(token, secret);
             const { role } = payload;
@@ -47,13 +46,6 @@ export async function middleware(request: NextRequest) {
                     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
                 }
             }
-
-        } catch (error) {
-            // If token is invalid, clear it and redirect to signin
-            // const response = NextResponse.redirect(new URL('/signin', request.url));
-            // response.cookies.delete('token');
-            // return response;
-        }
     } else {
         // Redirect to signin if no token is present for protected routes
         if (request.nextUrl.pathname.startsWith('/api/')) {
