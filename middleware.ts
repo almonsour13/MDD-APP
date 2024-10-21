@@ -6,12 +6,13 @@ const ADMIN_ROLE = 1;
 const USER_ROLE = 2;
 
 export async function middleware(request: NextRequest) {
+    console.log("Request:", request.nextUrl.pathname)
     const token = request.cookies.get('token')?.value;
 
     // Allow unauthenticated access to signup and signin pages
     if (request.nextUrl.pathname.startsWith('/api/auth') || 
-        (!token && request.nextUrl.pathname.startsWith('/signin')) || 
-        (!token && request.nextUrl.pathname.startsWith('/signup'))) {
+        (!token && request.nextUrl.pathname === '/signin') || 
+        (!token && request.nextUrl.pathname === '/signin')) {
         return NextResponse.next();
     }
 
@@ -21,7 +22,6 @@ export async function middleware(request: NextRequest) {
             const { payload } = await jwtVerify(token, secret);
             const { role } = payload;
 
-            // Redirect based on role for signin/signup
             if (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup') {
                 return role === ADMIN_ROLE 
                     ? NextResponse.redirect(new URL('/admin', request.url))
@@ -36,7 +36,6 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(new URL('/unauthorized', request.url));
             }
 
-            // API RBAC logic
             if (request.nextUrl.pathname.startsWith('/api/admin') && role !== ADMIN_ROLE) {
                 return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
             }
@@ -44,7 +43,6 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
             }
         } else {
-            // Redirect to signin if no token is present for protected routes
             if (request.nextUrl.pathname.startsWith('/api/')) {
                 return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
             }
@@ -59,5 +57,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/((?!_next/static|favicon.ico).*)'],
+    matcher: [
+        '/signin',
+        '/signup',
+        '/admin/:path*',
+        '/user/:path*',
+        "/api/auth/:path*",
+        "/api/admin/:path*",
+        "/api/user/:path*",
+    ],
 };

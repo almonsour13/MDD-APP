@@ -54,9 +54,6 @@ export async function POST(req: Request) {
             response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
             response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-      
-          console.log('Cookie set:', response.cookies.get('token'));
-
         return response;
     } catch (error) {
         console.error('Error:', error);
