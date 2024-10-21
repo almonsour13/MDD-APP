@@ -5,7 +5,6 @@ import { jwtVerify } from 'jose';
 export async function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value;
 
-    // Allow public routes except signin when token is present
     if (request.nextUrl.pathname.startsWith('/api/auth') || !token && request.nextUrl.pathname.startsWith('/signin') || !token && request.nextUrl.pathname.startsWith('/signup')) {
         return NextResponse.next();
     }
@@ -16,7 +15,6 @@ export async function middleware(request: NextRequest) {
             const { payload } = await jwtVerify(token, secret);
             const { role } = payload;
 
-            // Redirect from signin to appropriate dashboard if token is valid
             if (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup') {
                 if (role === 1) {
                     return NextResponse.redirect(new URL('/admin', request.url));
@@ -26,26 +24,26 @@ export async function middleware(request: NextRequest) {
             }
 
             if (request.nextUrl.pathname.startsWith('/admin')) {
-                if (role !== 1) { // Check if role is not admin (1)
+                if (role !== 1) {
                     return NextResponse.redirect(new URL('/unauthorized', request.url));
                 }
             }
 
             if (request.nextUrl.pathname.startsWith('/user')) {
-                if (role !== 2 && role !== 1) { // Check if role is neither user (2) nor admin (1)
+                if (role !== 2 && role !== 1) {
                     return NextResponse.redirect(new URL('/unauthorized', request.url));
                 }
             }
 
             // API RBAC logic
             if (request.nextUrl.pathname.startsWith('/api/admin')) {
-                if (role !== 1) { // Check if role is not admin (1)
+                if (role !== 1) {
                     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
                 }
             }
 
             if (request.nextUrl.pathname.startsWith('/api/user')) {
-                if (role !== 2 && role !== 1) { // Check if role is neither user (2) nor admin (1)
+                if (role !== 2 && role !== 1) {
                     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
                 }
             }
