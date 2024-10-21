@@ -34,16 +34,27 @@ export async function POST(req: Request) {
           );
       
           const response = NextResponse.json({ success: true, role: user.role });
-          response.cookies.set('token', token, {
-            httpOnly: true,                          
-            secure: true,  
-            sameSite: 'none',                         // Allow cross-origin requests
-            maxAge: 3600,                            
-            path: '/',                                
-          });
-          
-      
-          return response;
+        
+        // Get the origin of the request
+        const origin = req.headers.get('origin');
+        
+        // Set the cookie with more flexible options
+        response.cookies.set('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Only use secure in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 3600,
+            path: '/',
+            domain: process.env.COOKIE_DOMAIN, // Set this in your environment variables
+        });
+
+        // Set CORS headers
+        response.headers.set('Access-Control-Allow-Origin', origin || '*');
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+        return response;
     } catch (error) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Something went wrong.' }, { status: 500 });

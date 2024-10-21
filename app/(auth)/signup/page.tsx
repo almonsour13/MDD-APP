@@ -53,7 +53,7 @@ export default function SignupForm() {
       </div>
     </div>
       <div className="flex-1 flex items-center justify-center">
-        <Card className="w-full max-w-lg mx-auto border-0">
+        <Card className="w-full max-w-lg mx-auto border-0 bg-transparent">
           <CardHeader>
             <CardTitle className="text-2xl text-primary">Sign Up</CardTitle>
             <CardDescription>

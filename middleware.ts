@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value;
 
     // Allow public routes except signin when token is present
-    if (request.nextUrl.pathname.startsWith('/api/auth')) {
+    if (request.nextUrl.pathname.startsWith('/api/auth') || !token && request.nextUrl.pathname.startsWith('/signin') || !token && request.nextUrl.pathname.startsWith('/signup')) {
         return NextResponse.next();
     }
 
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
             const { role } = payload;
 
             // Redirect from signin to appropriate dashboard if token is valid
-            if (request.nextUrl.pathname === '/signin') {
+            if (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup') {
                 if (role === 1) {
                     return NextResponse.redirect(new URL('/admin', request.url));
                 } else if (role === 2) {
