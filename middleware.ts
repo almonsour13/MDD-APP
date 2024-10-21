@@ -52,9 +52,9 @@ export async function middleware(request: NextRequest) {
 
         } catch (error) {
             // If token is invalid, clear it and redirect to signin
-            const response = NextResponse.redirect(new URL('/signin', request.url));
-            response.cookies.delete('token');
-            return response;
+            // const response = NextResponse.redirect(new URL('/signin', request.url));
+            // response.cookies.delete('token');
+            // return response;
         }
     } else {
         // Redirect to signin if no token is present for protected routes
