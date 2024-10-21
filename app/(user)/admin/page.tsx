@@ -69,7 +69,7 @@ const Dashboard = () => {
       </Card>
 
       {/* Filter and Actions */}
-      <div className="flex flex-col md:flex-row items-end justify-end mb-4">
+      <div className="flex flex-col md:flex-row items-end justify-end">
         <div className="flex items-center space-x-2">
           <Button variant="outline" className="gap-2">
             <ListFilter className="h-3.5 w-3.5" />
