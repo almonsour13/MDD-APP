@@ -21,7 +21,6 @@ export async function POST(req: Request) {
         }
 
         const passwordMatch = await compare(password, user.password);
-        console.log('Password match:', passwordMatch);
         
         if (!passwordMatch) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 });

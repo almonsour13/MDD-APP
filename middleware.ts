@@ -2,58 +2,57 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
+const ADMIN_ROLE = 1;
+const USER_ROLE = 2;
+
 export async function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value;
 
-    if (request.nextUrl.pathname.startsWith('/api/auth') || !token && request.nextUrl.pathname.startsWith('/signin') || !token && request.nextUrl.pathname.startsWith('/signup')) {
+    // Allow unauthenticated access to signup and signin pages
+    if (request.nextUrl.pathname.startsWith('/api/auth') || 
+        (!token && request.nextUrl.pathname.startsWith('/signin')) || 
+        (!token && request.nextUrl.pathname.startsWith('/signup'))) {
         return NextResponse.next();
     }
 
-    if (token) {
+    try {
+        if (token) {
             const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
             const { payload } = await jwtVerify(token, secret);
             const { role } = payload;
 
+            // Redirect based on role for signin/signup
             if (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/signup') {
-                if (role === 1) {
-                    return NextResponse.redirect(new URL('/admin', request.url));
-                } else if (role === 2) {
-                    return NextResponse.redirect(new URL('/user', request.url));
-                }
+                return role === ADMIN_ROLE 
+                    ? NextResponse.redirect(new URL('/admin', request.url))
+                    : NextResponse.redirect(new URL('/user', request.url));
             }
 
-            if (request.nextUrl.pathname.startsWith('/admin')) {
-                if (role !== 1) {
-                    return NextResponse.redirect(new URL('/unauthorized', request.url));
-                }
+            // Check role for admin and user paths
+            if (request.nextUrl.pathname.startsWith('/admin') && role !== ADMIN_ROLE) {
+                return NextResponse.redirect(new URL('/unauthorized', request.url));
             }
-
-            if (request.nextUrl.pathname.startsWith('/user')) {
-                if (role !== 2 && role !== 1) {
-                    return NextResponse.redirect(new URL('/unauthorized', request.url));
-                }
+            if (request.nextUrl.pathname.startsWith('/user') && (role !== USER_ROLE && role !== ADMIN_ROLE)) {
+                return NextResponse.redirect(new URL('/unauthorized', request.url));
             }
 
             // API RBAC logic
-            if (request.nextUrl.pathname.startsWith('/api/admin')) {
-                if (role !== 1) {
-                    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-                }
+            if (request.nextUrl.pathname.startsWith('/api/admin') && role !== ADMIN_ROLE) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
             }
-
-            if (request.nextUrl.pathname.startsWith('/api/user')) {
-                if (role !== 2 && role !== 1) {
-                    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-                }
+            if (request.nextUrl.pathname.startsWith('/api/user') && (role !== USER_ROLE && role !== ADMIN_ROLE)) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
             }
-    } else {
-        // Redirect to signin if no token is present for protected routes
-        if (request.nextUrl.pathname.startsWith('/api/')) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-        if (request.nextUrl.pathname !== '/signin') {
+        } else {
+            // Redirect to signin if no token is present for protected routes
+            if (request.nextUrl.pathname.startsWith('/api/')) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+            }
             return NextResponse.redirect(new URL('/signin', request.url));
         }
+    } catch (error) {
+        console.error('Token verification failed:', error);
+        return NextResponse.redirect(new URL('/signin', request.url));
     }
 
     return NextResponse.next();
